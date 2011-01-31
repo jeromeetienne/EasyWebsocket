@@ -1,0 +1,21 @@
+<html>
+<head>
+	<script src="websocketanywhere.js"></script>	
+</head>
+<body>
+	<script>
+		var url		= "ws://example.com/superwawa"
+		var socket	= new WebsocketAnywhere(url);
+		socket.onopen	= function(){
+			console.log("highend API onopen");
+			socket.send("first sent message")
+		}
+		socket.onmessage= function(){
+			
+		}
+		socket.onclose	= function(){
+			
+		}
+	</script>
+</body>
+</html>
