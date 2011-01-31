@@ -7,6 +7,7 @@ This project provides WebSocket functionality to any web project.
 
 
 API
+
 * /create
   * description: create a Channel for the caller page
   * "clientId": uri variable of the clientId for which the channel is created
