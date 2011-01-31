@@ -1,4 +1,4 @@
-application: ezchannel99
+application: websocketanywhere
 version: 1
 runtime: python
 api_version: 1
@@ -8,4 +8,4 @@ handlers:
   static_dir: static
 
 - url: /.*
-  script: ezChannel.py
+  script: websocketAnywhere.py

@@ -1,6 +1,6 @@
 # mini Makefile to automatize tasks
 
-GAE_ROOT="../google_appengine"
+GAE_ROOT="/home/jerome/opt/gae/google_appengine"
 
 help:
 	@echo "$$ make server"
