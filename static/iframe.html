@@ -22,7 +22,7 @@ jQuery(function(){
 			console.log("message sent")
 		})
 	}
-	var onMessage	= function(domEvent){
+	var onWindowMessage	= function(domEvent){
 		// parse the event from the iframe
 		var eventFull	= JSON.parse(domEvent.data);
 		var eventType	= eventFull.type;
@@ -33,12 +33,13 @@ jQuery(function(){
 			sendChannel(eventData.destClientId, eventData.message);
 		}
 	}
+	
 	window.addEventListener("message", function(event){
 		// ignore the message received due to ChannelAPI itself
 		if(event.origin == "http://talkgadget.google.com")	return;
 		// log the event
 		console.log("recevied message from caller", event)
-		onMessage(event);		
+		onWindowMessage(event);		
 	}, false);
 	
 	var getToken	= function(){

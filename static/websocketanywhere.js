@@ -42,8 +42,8 @@ WebsocketAnywhere	= function(url, protocols)
 	}
 	
 
-	// TODO do i need to chain those handler ?
 	// bind the "message" dom event
+	// - TODO do i need to chain those handler ?
 	window.addEventListener("message", function(domEvent){
 		var iframeOrigin	= "http://localhost:8080";
 		// if event is not from the iframe, return now
