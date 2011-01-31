@@ -1,5 +1,5 @@
 /**
- * like Websocket API, but usable without setting up servers
+ * like Websocket API, but with no servers to setup
  *
  * * http://dev.w3.org/html5/websockets/ websocket specification
 */
