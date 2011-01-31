@@ -1,3 +1,4 @@
+# mini Makefile to automatize tasks
 
 GAE_ROOT="../google_appengine"
 
