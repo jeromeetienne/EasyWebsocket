@@ -6,7 +6,7 @@ This project provides WebSocket functionality to any web project.
   * Websocket Anywhere ?
 
 
-API
+### API
 
 * /create
   * description: create a Channel for the caller page

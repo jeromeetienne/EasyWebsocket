@@ -19,12 +19,12 @@ class sendChannel(webapp.RequestHandler):
         channel.send_message(clientId, message);
 
 application = webapp.WSGIApplication(
-                                        [
-                                          ('/create', createChannel)
-                                        , ('/send', sendChannel)
-                                        ],
-                                        debug=True
-                                    )
+    [
+      ('/create', createChannel)
+    , ('/send', sendChannel)
+    ],
+    debug=True
+)
 
 def main():
     run_wsgi_app(application)
