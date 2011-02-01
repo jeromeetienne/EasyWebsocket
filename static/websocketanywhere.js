@@ -40,7 +40,6 @@ WebsocketAnywhere	= function(url, protocols)
 	this.onclose		= function(){
 		console.log("default onclose")
 	}
-	
 
 	// bind the "message" dom event
 	// - TODO do i need to chain those handler ?
