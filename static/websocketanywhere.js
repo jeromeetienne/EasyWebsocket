@@ -6,35 +6,33 @@
 
 /**
  * Constructor
+ *
+ * @param url {string} the websocket url. the path part will be used as resource
+ * @param protocol {string} this one is just ignored 
 */
 WebsocketAnywhere	= function(url, protocols)
 {
 	var self	= this;
 	// TODO not sure what to do with url
 	// - the url is in fact the destination
-	// - so will contain the clientId
-	
-	// even less with protocols
-
-
-	// example of uri "ws://84.38.67.247:8080/dev/websocket/server.php"
 
 	// standard: readonly attribute DOMString url;
 	this.url	= url;
 	// extract resource from the url
+	// - the domain part is ignored
 	this.resource	= this.url.match(/.*:\/\/[^/]*\/(.+)/)[1];
 
-	if( true ){
+	if( true ){	// for devel
 		this.iframeOrigin	= "http://localhost:8080";
-	}else{
+	}else{		// for prod
 		this.iframeOrigin	= "http://websocketanywhere.appspot.com";
 	}
-	this.iframeUrl	= this.iframeOrigin+"/static/iframe.html";
+	this.iframeUrl	= this.iframeOrigin + "/static/iframe.html";
 	this._iframeCtor();
 	
-	
+		
 	this.onopen		= function(){
-		console.log("default on open")
+		console.log("default onopen")
 	}
 	this.onmessage		= function(event){
 		console.log("default onmessage")
@@ -110,14 +108,19 @@ WebsocketAnywhere.prototype._iframeCtor		= function()
 	// - this is the whole reason for the iframe stuff
 	iframe.src	= this.iframeUrl;
 	iframe.id	= this.iframeId;
+	// make the iframe invisible
+	iframe.style.position	= "absolute";
+	iframe.style.visibility	= "hidden";
+	iframe.style.top	= iframe.style.left = "0";
+	iframe.style.width	= iframe.style.height = "0";
+	// bind onload
 	iframe.onload	= function(event){
 		console.log("iframe loaded")
 		self._iframeSendConnect()
 	}
 	// append the iframe to <body>
 	var body	= document.getElementsByTagName('body')[0];
-	body.appendChild(iframe)
-	
+	body.appendChild(iframe);	
 }
 
 WebsocketAnywhere.prototype._iframeDtor		= function()

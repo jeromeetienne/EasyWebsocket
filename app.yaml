@@ -8,4 +8,4 @@ handlers:
   static_dir: static
 
 - url: /.*
-  script: websocketAnywhere.py
+  script: AppEngine/websocketAnywhere.py

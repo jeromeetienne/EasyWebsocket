@@ -11,5 +11,8 @@ help:
 server:
 	$(GAE_ROOT)/dev_appserver.py .
 
-deploy:
+minify:
+	closurec --js static/websocketanywhere.js --js_output_file static/websocketanywhere-min.js
+
+deploy:	minify
 	$(GAE_ROOT)/appcfg.py update .
