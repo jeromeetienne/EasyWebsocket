@@ -7,17 +7,18 @@
 	IFRAME content
 <script>
 jQuery(function(){
+	var connectedRsc		= null;
 	var createChannel	= function(token){
 		console.log("create channel", token)
 		var channel	= new goog.appengine.Channel(token);
 		var socket	= channel.open();
 		return socket;
 	}
-	var sendChannel	= function(clientId, message){
-		var callUrl	= "/send"
-					+ "?clientId="	+ encodeURIComponent(clientId)
+	var sendChannel	= function(resource, message){
+		var callUrl	= "/sendToResource"
+					+ "?resource="	+ encodeURIComponent(resource)
 					+ "&message="	+ encodeURIComponent(message);
-		console.log("sendMessage callurl", callUrl)
+		console.log("sendToResource callurl", callUrl)
 		jQuery.post(callUrl, function(result){
 			console.log("message sent")
 		})
@@ -29,9 +30,16 @@ jQuery(function(){
 		var eventData	= eventFull.data;
 
 		console.log("eventType", eventType, "eventData", eventData)
-		if( eventType == "data" ){
-			sendChannel(eventData.destClientId, eventData.message);
+		if( eventType == "connect" ){
+			connect(eventData.resource)
+		}else if( eventType == "data" ){
+			sendChannel(connectedRsc, eventData.message);
 		}
+	}
+
+	var notifyData	= function(data){
+		console.log("iframe notify", data)
+		window.parent.postMessage(JSON.stringify(data), "*");
 	}
 	
 	window.addEventListener("message", function(event){
@@ -42,15 +50,18 @@ jQuery(function(){
 		onWindowMessage(event);		
 	}, false);
 	
-	var getToken	= function(){
-		var clientId	= "ezChannel"+Math.floor(Math.random()*99999);
-		var callUrl	= "/create"
+	var connect	= function(resource){
+		var clientId	= "ezChannel"+Math.floor(Math.random()*99999);		
+		var callUrl	= "/createChannel"
 					+ "?callback=?"
+					+ "&resource="	+ encodeURIComponent(resource)
 					+ "&clientId="	+ encodeURIComponent(clientId);
+		console.log("callUrl", callUrl)
 		jQuery.getJSON(callUrl, function(token){
 			var socket	= createChannel(token);
 			socket.onopen	= function(){
-				console.log("channel connected")
+				console.log("channel connected resource", resource)
+				connectedRsc	= resource;
 				
 				// send the clientId to the parent window
 				var data	= {
@@ -59,9 +70,7 @@ jQuery(function(){
 						clientId	: clientId
 					}
 				}
-				window.parent.postMessage(JSON.stringify(data), "*");
-
-				sendChannel(clientId, "prout");
+				notifyData(data);
 			}
 			socket.onclose	= function(){
 				console.log("channel closed")
@@ -69,13 +78,15 @@ jQuery(function(){
 			socket.onerror	= function(error){
 				console.log("channel error", error)
 			}
-			socket.onmessage= function(path, opt_param){
-				console.log("got message", path, opt_param)
+			socket.onmessage= function(message, opt_param){
+				console.log("got message", message, opt_param)
+				notifyData({
+					type	: "data",
+					data	: message.data
+				});
 			}
 		});
 	}
-	
-	getToken();
 });
 </script>
 </body>

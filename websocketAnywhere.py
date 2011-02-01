@@ -8,24 +8,10 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 
 class Client(db.Model):
-    """All the data we store for a game"""
+    """the data about the client"""
     clientId    = db.StringProperty()
     resource    = db.StringProperty()
     timestamp   = db.DateTimeProperty()
-
-class clientAlive(webapp.RequestHandler):
-    def post(self):
-        clientId    = self.request.get("clientId");
-        client      = Client.all().filter('clientId =',clientId).get()
-        client.timestamp    = datetime.datetime.now()
-        client.put()
-
-class clientPurge(webapp.RequestHandler):
-    def post(self):
-        maxTime = datetime.datetime.now() - datetime.timedelta(hours=10)
-        clients = Client.all().filter('timestamp <', maxTime).fetch(1000)
-        for client in clients:
-            client.delete()
 
 # jsonp call which return the token to create the channel in .js
 class createChannel(webapp.RequestHandler):
@@ -34,7 +20,8 @@ class createChannel(webapp.RequestHandler):
         resource    = self.request.get("resource");
         callback    = self.request.get("callback");
         # create the record
-        client      = Client(clientId=clientId, resource=resource, timestamp=timestamp)
+        # TODO should i detect a collision on the clientid ?
+        client      = Client(clientId=clientId, resource=resource, timestamp=datetime.datetime.now())
         client.put()
         # create the channel
         token       = channel.create_channel(clientId);
@@ -42,14 +29,14 @@ class createChannel(webapp.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write("%s(\"%s\");\n" % (callback,token))
 
-# post method /send to send message to a give clientId
+# post method /send to send message to a given clientId
 class sendToClientId(webapp.RequestHandler):
     def post(self):
         clientId    = self.request.get("clientId");
         message     = self.request.get("message");
         channel.send_message(clientId, message);
 
-# post method /send to send message to a give clientId
+# post method /send to send message to all client of a given resource
 class sendToResource(webapp.RequestHandler):
     def post(self):
         resource    = self.request.get("resource");
@@ -58,12 +45,30 @@ class sendToResource(webapp.RequestHandler):
         for client in clients:
             channel.send_message(client.clientId, message);
 
+# must be called periodically by the clientId
+class clientAlive(webapp.RequestHandler):
+    def post(self):
+        clientId    = self.request.get("clientId");
+        client      = Client.all().filter('clientId =',clientId).get()
+        client.timestamp    = datetime.datetime.now()
+        client.put()
+
+# must be called periodically - TODO maybe a task in AppEngine
+class clientPurge(webapp.RequestHandler):
+    def post(self):
+        maxTime = datetime.datetime.now() - datetime.timedelta(hours=10)
+        clients = Client.all().filter('timestamp <', maxTime).fetch(1000)
+        for client in clients:
+            client.delete()
+
+
 application = webapp.WSGIApplication(
     [
-      ('/fetchRecord', fetchRecord)
-    , ('/createRecord', createRecord)
-    , ('/create', createChannel)
-    , ('/send'  , sendChannel)
+      ('/createChannel'     , createChannel)
+    , ('/sendToClientId'    , sendToClientId)
+    , ('/sendToResource'    , sendToResource)
+    , ('/clientAlive'       , clientAlive)
+    , ('/clientPurge'       , clientPurge)
     ],
     debug=True
 )

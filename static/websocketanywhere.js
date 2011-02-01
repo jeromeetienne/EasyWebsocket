@@ -1,5 +1,5 @@
 /**
- * like Websocket API, but with no servers to setup
+ * like Websocket, but with no servers to setup
  *
  * * http://dev.w3.org/html5/websockets/ websocket specification
 */
@@ -20,11 +20,16 @@ WebsocketAnywhere	= function(url, protocols)
 	// example of uri "ws://84.38.67.247:8080/dev/websocket/server.php"
 
 	// standard: readonly attribute DOMString url;
-	this.url		= url;
+	this.url	= url;
+	// extract resource from the url
+	this.resource	= this.url.match(/.*:\/\/[^/]*\/(.+)/)[1];
 
-	this.clientIdLocal	= null;
-	this.destClientId	= "superDestClientId";	// TODO to extract from the uri
-
+	if( true ){
+		this.iframeOrigin	= "http://localhost:8080";
+	}else{
+		this.iframeOrigin	= "http://websocketanywhere.appspot.com";
+	}
+	this.iframeUrl	= this.iframeOrigin+"/static/iframe.html";
 	this._iframeCtor();
 	
 	
@@ -44,9 +49,8 @@ WebsocketAnywhere	= function(url, protocols)
 	// bind the "message" dom event
 	// - TODO do i need to chain those handler ?
 	window.addEventListener("message", function(domEvent){
-		var iframeOrigin	= "http://localhost:8080";
 		// if event is not from the iframe, return now
-		if( domEvent.origin != iframeOrigin )	return;
+		if( domEvent.origin != self.iframeOrigin )	return;
 		// notify the local handler		
 		self._onWindowMessage(domEvent)
 	}, false);
@@ -59,14 +63,12 @@ WebsocketAnywhere.prototype._onWindowMessage	= function(domEvent)
 	var eventType	= eventFull.type;
 	var eventData	= eventFull.data;
 	// log the event
-	//console.log("recevied message from iframe", eventFull)
+	console.log("recevied message from iframe", eventFull)
 	
 	if( eventType == "connected" ){
-		this.clientIdLocal	= eventData.clientId;
-		//console.log("clientIdLocal", this.clientIdLocal);
-		
-		// TODO call this.onopen() to notify the user
 		this.onopen();
+	}else if( eventType == "data" ){
+		this.onmessage({ data : eventData });
 	}
 }
 
@@ -81,7 +83,7 @@ WebsocketAnywhere.prototype._onWindowMessage	= function(domEvent)
 */
 WebsocketAnywhere.prototype.send	= function(data)
 {
-	this._iframeSendMessage(this.destClientId, data);
+	this._iframeSendData(data);
 }
 
 /**
@@ -96,27 +98,26 @@ WebsocketAnywhere.prototype.close	= function()
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-WebsocketAnywhere.prototype._isConnected	= function()
-{
-	return this.clientIdLocal && this.iframeIdExist();
-}
-
-
 WebsocketAnywhere.prototype._iframeCtor		= function()
 {
+	var self	= this;
 	this.iframeId	= "WebsocketAnywhere-iframe-"+Math.floor(Math.random()*99999);
 
 	// create the iframe element
 	var iframe	= document.createElement('iframe');
-	iframe.src	= "/static/iframe.html";
 	// the html page calling ChannelAPI MUST run he same site as channelAPI server
 	// - seems to be a ChannelApi requirement
 	// - this is the whole reason for the iframe stuff
-	iframe.src	= "http://localhost:8080/static/iframe.html";
+	iframe.src	= this.iframeUrl;
 	iframe.id	= this.iframeId;
+	iframe.onload	= function(event){
+		console.log("iframe loaded")
+		self._iframeSendConnect()
+	}
 	// append the iframe to <body>
 	var body	= document.getElementsByTagName('body')[0];
 	body.appendChild(iframe)
+	
 }
 
 WebsocketAnywhere.prototype._iframeDtor		= function()
@@ -130,19 +131,34 @@ WebsocketAnywhere.prototype._iframeExist	= function()
 	return this.iframeId;
 }
 
-WebsocketAnywhere.prototype._iframeSendMessage	= function(clientId, message)
+WebsocketAnywhere.prototype._iframeSendRaw	= function(data)
 {
-	console.log("iframeSendMessage(",clientId,",",message,")")
-	var data	= {
-		type	: "data",
-		data	: {
-			destClientId	: clientId,
-			message		: message
-		}
-	}
+	console.log("iframeSendRaw(",data,")")
 	var iframeEl	= document.getElementById(this.iframeId).contentWindow;
 	var targetOrigin= "*";	// TODO not sure about this
 	iframeEl.postMessage(JSON.stringify(data), targetOrigin);
+}
+
+WebsocketAnywhere.prototype._iframeSendConnect	= function()
+{
+	var data	= {
+		type	: "connect",
+		data	: {
+			resource	: this.resource
+		}
+	}
+	this._iframeSendRaw(data);
+}
+
+WebsocketAnywhere.prototype._iframeSendData	= function(message)
+{
+	var data	= {
+		type	: "data",
+		data	: {
+			message		: message
+		}
+	}
+	this._iframeSendRaw(data);
 }
 
 /**
