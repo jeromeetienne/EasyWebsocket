@@ -13,9 +13,6 @@
 WebsocketAnywhere	= function(url, protocols)
 {
 	var self	= this;
-	// TODO not sure what to do with url
-	// - the url is in fact the destination
-
 	// standard: readonly attribute DOMString url;
 	this.url	= url;
 	// extract resource from the url
