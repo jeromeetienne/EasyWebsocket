@@ -19,12 +19,12 @@ EasyWebSocket	= function(url, protocols)
 	// - the domain part is ignored
 	this.resource	= this.url.match(/.*:\/\/[^/]*\/(.+)/)[1];
 
-	if( true ){	// for devel
+	if( false ){	// for devel
 		this.iframeOrigin	= "http://localhost:8080";
 	}else{		// for prod
-		this.iframeOrigin	= "http://websocketanywhere.appspot.com";
+		this.iframeOrigin	= "http://easywebsocket.appspot.com";
 	}
-	this.iframeUrl	= this.iframeOrigin + "/static/iframe.html";
+	this.iframeUrl	= this.iframeOrigin + "/web/iframe.html";
 	this._iframeCtor();
 	
 		

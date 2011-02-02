@@ -1,6 +1,6 @@
 # Easy Websocket
 
-*like Websocket but no servers to setup and available in any browser*
+*like Websocket but no server setup and available in any browser*
 
 Websocket Anywhere aims to make realtimes webapps in every browser without the trouble
 to setup Websocket servers.

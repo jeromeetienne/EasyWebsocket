@@ -1,11 +1,14 @@
-application: websocketanywhere
+application: easywebsocket
 version: 1
 runtime: python
 api_version: 1
 
 handlers:
-- url: /static
-  static_dir: static
+- url: /web
+  static_dir: web
+
+- url: /examples
+  static_dir: examples
 
 - url: /.*
-  script: AppEngine/websocketAnywhere.py
+  script: AppEngine/easyWebSocket.py
