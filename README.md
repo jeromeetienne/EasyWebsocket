@@ -11,7 +11,7 @@ The API is copied on [Websocket standard API](http://dev.w3.org/html5/websockets
 
 Just include the following in your webpage.
 
-    <script src="https://github.com/jeromeetienne/EasyWebsocket/raw/master/static/easyWebSocket-min.js"></script>	
+    <script src="http://jeromeetienne.github.com/EasyWebsocket/web/easyWebSocket-min.js"></script>	
     <script>
         var socket = new EasyWebSocket("ws://example.com/resource");
         socket.onopen	= function(){
@@ -24,4 +24,4 @@ Just include the following in your webpage.
 
 # Demo
 
-I wrote a [chat demo](https://github.com/jeromeetienne/EasyWebsocket/raw/master/static/chat.html) over EasyWebSocket
+I wrote a [chat demo](http://jeromeetienne.github.com/EasyWebsocket/example/chat.html) over EasyWebSocket
