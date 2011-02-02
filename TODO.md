@@ -6,7 +6,7 @@
   * currently homepage of the project is http://jeromeetienne.github.com/EasyWebSocket
   * would be a .org for 12$ to -invest-
   * maybe to publish it this way for now, and if it still work in 2 weeks, get a domain
-
+* to make a demo on the home page which display the mouse of others
 
 ### DONE
 
