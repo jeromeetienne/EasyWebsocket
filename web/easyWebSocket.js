@@ -17,6 +17,7 @@ EasyWebSocket	= function(url, protocols)
 	this.url	= url;
 	// extract resource from the url
 	// - the domain part is ignored
+	// - TODO i should take the whole url
 	this.resource	= this.url.match(/.*:\/\/[^/]*\/(.+)/)[1];
 
 	if( false ){	// for devel
