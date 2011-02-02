@@ -1,0 +1,72 @@
+<html>
+<head>
+	<script src="../web/easyWebSocket.js"></script>	
+</head>
+<body>
+	Username: <span id="chat-username"></span>
+	<br>
+	Status: <span id="chat-status">not Connected</span>
+	<br>
+	<div id="chat-textarea">
+	</div>
+	<form id="chat-form" action="#">
+		<input id="chat-input" type="text" />
+		<input id="chat-submit" type="submit" value="Send" />
+	</form>
+
+	<script>
+		var ChatAnywhere	= function(){
+			var channelName	= "wsanywhere-chat"
+			var username	= "user-"+Math.floor(Math.random()*9999);
+
+			var statusEl	= document.getElementById("chat-status")
+			var textAreaEl	= document.getElementById("chat-textarea")
+			var usernameEl	= document.getElementById("chat-username")
+			var formEl	= document.getElementById("chat-form");
+			var inputEl	= document.getElementById("chat-input")
+			var submitEl	= document.getElementById("chat-submit");
+
+			usernameEl.innerHTML	= username;
+			
+			var setStatus	= function(label){
+				document.getElementById("chat-status").innerHTML	= label;
+			}
+			var setMessage	= function(username, message){
+				console.log("USER", username, message)
+				var usernameEl	= document.createElement('span');
+				usernameEl.innerHTML	= username;
+				var messageEl	= document.createElement('span');
+				messageEl.innerHTML	= message;
+				var lineEl	= document.createElement('p');
+				lineEl.appendChild(usernameEl)
+				lineEl.appendChild(messageEl);
+				textAreaEl.appendChild(lineEl)
+			}
+			
+			
+			var socketUrl	= "ws://example.com/"+channelName;
+			var socket	= new EasyWebSocket(socketUrl);
+			socket.onopen	= function(){
+				setStatus("Connected");
+			}
+			socket.onmessage= function(event){
+				var data	= JSON.parse(event.data);
+				setMessage(data.username, data.message);
+			}
+			socket.onclose	= function(){
+				setStatus("Closed");
+			}
+			formEl.onsubmit	= function(){
+				if( !inputEl.value )	return false;
+				socket.send(JSON.stringify({
+					username: username,
+					message	: inputEl.value
+				}));
+				inputEl.value	= "";
+				return false;
+			}
+		}
+		var chat	= new ChatAnywhere();
+	</script>	
+</body>
+</html>
