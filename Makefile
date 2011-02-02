@@ -25,6 +25,6 @@ deployGhPage:
 	rm -rf /tmp/EasyWebsocketGhPages	
 	(cd /tmp && git clone git@github.com:jeromeetienne/EasyWebsocket.git EasyWebsocketGhPages)
 	(cd /tmp/EasyWebsocketGhPages && git checkout gh-pages)
-	cp -a ./web ./examples /tmp/EasyWebsocketGhPages
+	cp -a ./web ./example /tmp/EasyWebsocketGhPages
 	(cd /tmp/EasyWebsocketGhPages && git add . && git commit -a -m "Another deployement" && git push origin gh-pages)
 	rm -rf /tmp/EasyWebsocketGhPages
