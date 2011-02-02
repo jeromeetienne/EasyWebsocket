@@ -4,7 +4,10 @@
 
 Websocket Anywhere aims to make realtimes webapps in every browser without the trouble
 to setup Websocket servers. The API is copied on [Websocket standard API][http://dev.w3.org/html5/websockets/].
-To use it:
+
+# How to use it
+
+Just include the following in your webpage.
 
     <script src="http://easywebsocket.org/easywebsocket.js"></script>	
     <script>
