@@ -10,7 +10,7 @@
  * @param url {string} the websocket url. the path part will be used as resource
  * @param protocol {string} this one is just ignored 
 */
-WebsocketAnywhere	= function(url, protocols)
+EasyWebSocket	= function(url, protocols)
 {
 	var self	= this;
 	// standard: readonly attribute DOMString url;
@@ -51,7 +51,7 @@ WebsocketAnywhere	= function(url, protocols)
 	}, false);
 }
 
-WebsocketAnywhere.prototype._onWindowMessage	= function(domEvent)
+EasyWebSocket.prototype._onWindowMessage	= function(domEvent)
 {		
 	// parse the event from the iframe
 	var eventFull	= JSON.parse(domEvent.data);
@@ -76,7 +76,7 @@ WebsocketAnywhere.prototype._onWindowMessage	= function(domEvent)
  * 
  * @param data {string} the data to send
 */
-WebsocketAnywhere.prototype.send	= function(data)
+EasyWebSocket.prototype.send	= function(data)
 {
 	this._iframeSendData(data);
 }
@@ -84,7 +84,7 @@ WebsocketAnywhere.prototype.send	= function(data)
 /**
  * Close the connection
 */
-WebsocketAnywhere.prototype.close	= function()
+EasyWebSocket.prototype.close	= function()
 {
 	this._iframeDtor();
 }
@@ -93,10 +93,10 @@ WebsocketAnywhere.prototype.close	= function()
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-WebsocketAnywhere.prototype._iframeCtor		= function()
+EasyWebSocket.prototype._iframeCtor		= function()
 {
 	var self	= this;
-	this.iframeId	= "WebsocketAnywhere-iframe-"+Math.floor(Math.random()*99999);
+	this.iframeId	= "EasyWebSocket-iframe-"+Math.floor(Math.random()*99999);
 
 	// create the iframe element
 	var iframe	= document.createElement('iframe');
@@ -120,18 +120,18 @@ WebsocketAnywhere.prototype._iframeCtor		= function()
 	body.appendChild(iframe);	
 }
 
-WebsocketAnywhere.prototype._iframeDtor		= function()
+EasyWebSocket.prototype._iframeDtor		= function()
 {
 	var iframe	= document.getElementById(this.iframeId);
 	iframe.parent.removeChild(iframe);
 }
 
-WebsocketAnywhere.prototype._iframeExist	= function()
+EasyWebSocket.prototype._iframeExist	= function()
 {
 	return this.iframeId;
 }
 
-WebsocketAnywhere.prototype._iframeSendRaw	= function(data)
+EasyWebSocket.prototype._iframeSendRaw	= function(data)
 {
 	console.log("iframeSendRaw(",data,")")
 	var iframeEl	= document.getElementById(this.iframeId).contentWindow;
@@ -139,7 +139,7 @@ WebsocketAnywhere.prototype._iframeSendRaw	= function(data)
 	iframeEl.postMessage(JSON.stringify(data), targetOrigin);
 }
 
-WebsocketAnywhere.prototype._iframeSendConnect	= function()
+EasyWebSocket.prototype._iframeSendConnect	= function()
 {
 	var data	= {
 		type	: "connect",
@@ -150,7 +150,7 @@ WebsocketAnywhere.prototype._iframeSendConnect	= function()
 	this._iframeSendRaw(data);
 }
 
-WebsocketAnywhere.prototype._iframeSendData	= function(message)
+EasyWebSocket.prototype._iframeSendData	= function(message)
 {
 	var data	= {
 		type	: "data",
@@ -164,8 +164,8 @@ WebsocketAnywhere.prototype._iframeSendData	= function(message)
 /**
  * Possible values for .readyState
 */
-WebsocketAnywhere.STATE	= {}
-WebsocketAnywhere.STATE.CONNECTING	= 0;
-WebsocketAnywhere.STATE.OPEN		= 1;
-WebsocketAnywhere.STATE.CLOSING		= 2;
-WebsocketAnywhere.STATE.CLOSED		= 3;
+EasyWebSocket.STATE	= {}
+EasyWebSocket.STATE.CONNECTING	= 0;
+EasyWebSocket.STATE.OPEN		= 1;
+EasyWebSocket.STATE.CLOSING		= 2;
+EasyWebSocket.STATE.CLOSED		= 3;

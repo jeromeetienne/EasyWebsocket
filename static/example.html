@@ -1,12 +1,12 @@
 <html>
 <head>
-	<script src="websocketanywhere.js"></script>	
+	<script src="easyWebSocket.js"></script>	
 </head>
 <body>
 	<script>
 		var basicTest	= function(){
 			var url		= "ws://example.com/superwa/wa"
-			var socket	= new WebsocketAnywhere(url);
+			var socket = new EasyWebSocket(url);
 			socket.onopen	= function(){
 				console.log("highend API onopen");
 				socket.send("first sent message")

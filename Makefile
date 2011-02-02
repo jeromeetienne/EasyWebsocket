@@ -12,7 +12,7 @@ server:
 	$(GAE_ROOT)/dev_appserver.py .
 
 minify:
-	closurec --js static/websocketanywhere.js --js_output_file static/websocketanywhere-min.js
+	closurec --js static/easyWebSocket.js --js_output_file static/easyWebSocket-min.js
 
 deploy:	minify
 	$(GAE_ROOT)/appcfg.py update .

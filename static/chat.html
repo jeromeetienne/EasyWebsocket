@@ -1,6 +1,6 @@
 <html>
 <head>
-	<script src="websocketanywhere.js"></script>	
+	<script src="easyWebSocket.js"></script>	
 </head>
 <body>
 	Username: <span id="chat-username"></span>
@@ -45,7 +45,7 @@
 			
 			
 			var socketUrl	= "ws://example.com/"+channelName;
-			var socket	= new WebsocketAnywhere(socketUrl);
+			var socket	= new EasyWebSocket(socketUrl);
 			socket.onopen	= function(){
 				setStatus("Connected");
 			}
