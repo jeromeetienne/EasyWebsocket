@@ -6,7 +6,7 @@
 	<script>
 	    var socket = new EasyWebSocket("ws://example.com/resource");
 	    socket.onopen   = function(){
-		socket.send("hello world.")
+		socket.send("hello world!")
 	    }
 	    socket.onmessage= function(event){
 		alert("received "+ event.data)
