@@ -1,0 +1,97 @@
+<html>
+<head>
+	<script src="/_ah/channel/jsapi"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+</head>
+<body>
+	IFRAME content
+<script>
+jQuery(function(){
+	/**
+	 * TODO to the clientAlive call periodically
+	 * TODO rewrite this code it is dirty
+	*/
+	var connectedRsc		= null;
+	var createChannel	= function(token){
+		console.log("create channel", token)
+		var channel	= new goog.appengine.Channel(token);
+		var socket	= channel.open();
+		return socket;
+	}
+	var sendChannel	= function(resource, message){
+		var callUrl	= "/sendToResource"
+					+ "?resource="	+ encodeURIComponent(resource)
+					+ "&message="	+ encodeURIComponent(message);
+		console.log("sendToResource callurl", callUrl)
+		jQuery.post(callUrl, function(result){
+			console.log("message sent")
+		})
+	}
+	var onWindowMessage	= function(domEvent){
+		// parse the event from the iframe
+		var eventFull	= JSON.parse(domEvent.data);
+		var eventType	= eventFull.type;
+		var eventData	= eventFull.data;
+
+		console.log("eventType", eventType, "eventData", eventData)
+		if( eventType == "connect" ){
+			connect(eventData.resource)
+		}else if( eventType == "data" ){
+			sendChannel(connectedRsc, eventData.message);
+		}
+	}
+
+	var notifyData	= function(data){
+		console.log("iframe notify", data)
+		window.parent.postMessage(JSON.stringify(data), "*");
+	}
+	
+	window.addEventListener("message", function(event){
+		// ignore the message received due to ChannelAPI itself
+		if(event.origin == "http://talkgadget.google.com")	return;
+		// log the event
+		console.log("recevied message from caller", event)
+		onWindowMessage(event);		
+	}, false);
+	
+	var connect	= function(resource){
+		var clientId	= "ezChannel"+Math.floor(Math.random()*99999);		
+		var callUrl	= "/createChannel"
+					+ "?callback=?"
+					+ "&resource="	+ encodeURIComponent(resource)
+					+ "&clientId="	+ encodeURIComponent(clientId);
+		console.log("callUrl", callUrl)
+		jQuery.getJSON(callUrl, function(token){
+			var socket	= createChannel(token);
+			socket.onopen	= function(){
+				console.log("channel connected resource", resource)
+				connectedRsc	= resource;
+				
+				// send the clientId to the parent window
+				var data	= {
+					type	: "connected",
+					data	: {
+						clientId	: clientId
+					}
+				}
+				notifyData(data);
+			}
+			socket.onclose	= function(){
+				console.log("channel closed")
+			}
+			socket.onerror	= function(error){
+				console.log("channel error", error)
+			}
+			socket.onmessage= function(message, opt_param){
+				console.log("got message", message, opt_param)
+				notifyData({
+					type	: "data",
+					data	: message.data
+				});
+			}
+		});
+	}
+});
+</script>
+</body>
+</html>
