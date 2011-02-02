@@ -24,4 +24,4 @@ Just include the following in your webpage.
 
 # Demo
 
-I wrote a [chat demo](http://jeromeetienne.github.com/EasyWebsocket/example/chat.html) over EasyWebSocket
+I wrote a [chat demo](http://jeromeetienne.github.com/EasyWebsocket/example/demo.html) over EasyWebSocket

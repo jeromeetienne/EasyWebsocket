@@ -56,8 +56,6 @@
 			socket.onclose	= function(){
 				setStatus("Closed");
 			}
-			
-
 			formEl.onsubmit	= function(){
 				if( !inputEl.value )	return false;
 				socket.send(JSON.stringify({
@@ -67,7 +65,6 @@
 				inputEl.value	= "";
 				return false;
 			}
-			
 		}
 		var chat	= new ChatAnywhere();
 	</script>	
