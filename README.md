@@ -1,8 +1,8 @@
-# Easy Websocket
+# Easy WebSocket
 
-*like Websocket but no server setup and available in any browser*
+*like WebSocket but no server setup and available in any browser*
 
-Websocket Anywhere aims to make realtimes webapps in every browser without the trouble
+EasyWebSocket aims to make realtimes webapps in every browser without the trouble
 to setup Websocket servers.
 
 The API is copied on [Websocket standard API](http://dev.w3.org/html5/websockets/).
