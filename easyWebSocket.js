@@ -24,7 +24,7 @@ EasyWebSocket	= function(url, protocols)
 	// define the class logging function
 	this.log	= false ? function(){ console.log.apply(console, arguments) } : function(){};
 
-	this.iframeOrigin	= true ? "http://localhost:8080" : "http://easywebsocket.org";
+	this.iframeOrigin	= false ? "http://localhost:8080" : "http://easywebsocket.appspot.com";
 	this.iframeUrl		= this.iframeOrigin + "/web/iframe.html";
 	this._iframeCtor();
 	

@@ -14,47 +14,44 @@ body {
 	position	: absolute;
 	width		: 20px;
 	height		: 20px;
-	background	: #F00;  
+	background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAB3RJTUUH1wYXBxAQ01sIAQAAAAlwSFlzAAAewQAAHsEBw2lUUwAAAARnQU1BAACxjwv8YQUAAAT1SURBVHja7VZLSFxnFD4zOqPjOxqbOqNRfEUTrVQLBaHBghA0ER9BpHSnqAu7kWQhSlK0UrCUunUhriyCYhvUhY+gImpQic9WZBqjUaPGGcfXOA9nnNvvXO8EGywdjd154GPu3Lnz/9//ne+cc4mI5EDgzZs3v6qpqflxf39/z+FwCIeHh6sjIyPfPX36VNPU1OSRlpYmo/8heFEPICY0NDS1v7+/EkTCQYAEQSB3d3fH7u5uV0dHxw8HBwd/+fv7G4uKio4vk4Ab4AfEYfG4kpKSu56enqry8nLq7u6muLg4WXBw8K3ExMSHgYGB5uHh4eWCggKbt7f38fz8/KUQYPkVgMpmsynX19cN+KStrS1qbW2le/fuUWNjI5nN5qDo6OifQOxXEPoShK719fW5XZYCnAK1UqlUp6amhsTExITy6V68eEF7e3s0NDREODnhviwsLCwCqjxEmuRIy6sHDx7Y8P14fHxc+BgFbMDh0dGRdWFhQSeXyyk+Pp7c3NzIbrcTzEijo6OUl5dHT548IZ1O56vRaKoePXr0++3bt7+GIoFIl/vHKMAkrgEalUrllZ+fn8wmbGlpIYvFIj50fHxMIEgzMzPU2dlJ2JRiY2NZrbyoqKgA3NNmZGRYMzMz7T09PedWgz0Qh5OXRkRE/IITmjc2NgS1Wi3IZDJe7B9QKBSCr6+vkJOTI0xOTgpGo1FAqrQDAwPfVFdXf9LQ0KCkk+pyWQEOFcpOA3dfz83NjQ4ICPB7/vw5ra2tEatxOvg7p2ZpaYna29vF66SkpKDIyMgc+EEzMTExc//+fSOUcKlc5dLJWGsjZLatrq7qnT5AHzjzT0yC0wO1qK6ujrKysmhwcNANpfwton56ejrYVRXk0qcVOLBarUdarVZ/2ojvpcI15BfBvzu9YTKZaHZ2lgoLC6mtrY2g3l2UswY/K8+jgLMSLFhs6ywF+Lq0tJTS09MJJyU0LJEU32dSkJ9QFazKNgj4S976z3DuYOcUoAmZxsbG9JDYAYfLeWEYUWzLvBnuiaW4uLhIzc3N1NXVRTAklZWViWWKdm3A7Him1+vtrprQSYANY4KkJjjaajAYdvz8/ILCw8NpZ2dHlJpJcIdEqVJCQoKttrZW8fjxY/H0UMOBKniJzYc2NzdfoXfoJFVdJsBWNzmNCAm3kcsglnVubk4kwMZbWVkRr9EFR0HSis4Zg+ftKL2x3t7eN1DgLcz5J9ZZB47OQ8BpRJHA69ev9Xfu3IllApxjng+cAlaDU4LB5FtZWTkF086BmA2fe9j4DchpscYysCt5y2UCwikCFswCXXZ2tmgqNhtvmpycTFVVVWIFwAMbSJUOTciI/+wDq8AS8A4wS4qeywPvjQgCZgyXd9hIwKYyNh4aC2FUMxkBg2mqvr5+EA2I5/GmRMAAHEhrXHgwcdncwmlLQkJCfl5eXjbATM5WK8AXBxUVFb/duHHjex8fn1w8GwZ40kk3vfDb0ocznUfzpyARhHreSUlJ0Xh4eCimpqYWiouLn6G9avHK9gr5/gPPvZXS5rLcZ4Xsg2t+O/oc8n/h5eUVjNmg5OGDDS3oeFt4MdGiHNloG3RSNReW+ywCHOwJNfAZEAl40Uk9s7kW6cTh29K9j978LAL8nXv4dU4F4CPJrJNwSCdN69Li38zD3lBIinCOj6SNL+XUV3EVV3EVp+NvS2d/EQYPBEcAAAAASUVORK5CYII=");
 }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script src="../easyWebSocket.js"></script>
 <script>
 jQuery(function() {
-
-var socket	= new EasyWebSocket("ws://cursors/movingDDD");
+var socket	= new EasyWebSocket("ws://cursors/moving");
 var me		= Math.floor(Math.random() * 1000000).toString(32)
 var cursors	= {}
 
 socket.onopen	= function() {
-	binds()
+	setInterval(function(){
+		if( mouseCurX == mouseOldX && mouseCurY == mouseOldY )	return;
+		socket.send(me + ' ' + mouseCurX + ' ' + mouseCurY)
+		mouseOldX	= mouseCurX;
+		mouseOldY	= mouseCurY;
+	}, 0.5*1000)	
 }
 
 socket.onmessage = function(event) {
 	var data = event.data.split(' ')
-	if (data[0] != me) return
-	console.log(event)  
 	if (typeof cursors[data[0]] === 'undefined') {
 		cursors[data[0]] = jQuery('<div/>').attr('id', data[0]).addClass('cursor').appendTo('body')
 	}
 	cursors[data[0]].css({ left: data[1] + 'px', top: data[2] + 'px' })
 }
 
-var then = +new Date()
-  , throttle = function(t, f) {
-  if (+new Date() - then > t) {
-    then = +new Date()
-    f()
-  } else delete f
-}
 
-var binds = function() {
-	$('body').bind('mousemove', function(e) {
-		throttle(1000/1, function() {
-			socket.send(me + ' ' + e.pageX + ' ' + e.pageY)
-		})
-	})
-}
+var mouseCurX	= 0;
+var mouseCurY	= 0;
+var mouseOldX	= 0;
+var mouseOldY	= 0;
+
+$('body').bind('mousemove', function(e){
+	mouseCurX	= e.pageX;
+	mouseCurY	= e.pageY;
+})
 
 })
 </script>
