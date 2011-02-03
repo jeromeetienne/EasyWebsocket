@@ -23,7 +23,7 @@ deployAppEngine:
 
 deployGhPage:
 	rm -rf /tmp/EasyWebsocketGhPages	
-	git clone . /tmp/EasyWebsocketGhPages
+	(cd /tmp && git clone git@github.com:jeromeetienne/EasyWebsocket.git EasyWebsocketGhPages)
 	(cd /tmp/EasyWebsocketGhPages && git checkout gh-pages)
 	cp -a index.html CNAME ./web ./example /tmp/EasyWebsocketGhPages
 	(cd /tmp/EasyWebsocketGhPages && git add . && git commit -a -m "Another deployement" && git push origin gh-pages)
