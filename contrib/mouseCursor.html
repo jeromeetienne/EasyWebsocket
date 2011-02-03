@@ -11,10 +11,10 @@ body {
 	margin:0;
 }
 .cursor {
-	position	:absolute;
-	width		:20px;
-	height		:20px;
-	background	:#F00;  
+	position	: absolute;
+	width		: 20px;
+	height		: 20px;
+	background	: #F00;  
 }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
@@ -50,7 +50,7 @@ var then = +new Date()
 
 var binds = function() {
 	$('body').bind('mousemove', function(e) {
-		throttle(1000/10, function() {
+		throttle(1000/1, function() {
 			socket.send(me + ' ' + e.pageX + ' ' + e.pageY)
 		})
 	})
