@@ -45,6 +45,17 @@ class sendToResource(webapp.RequestHandler):
         for client in clients:
             channel.send_message(client.clientId, message);
 
+# count the number of client on a given resource
+class resourceCount(webapp.RequestHandler):
+    def post(self):
+        resource    = self.request.get("resource");
+        callback    = self.request.get("callback");
+        # do the count
+        count       = Client.all().filter('resource',resource).count()
+        # build the jsonp answer
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write("%s(\"%s\");\n" % (callback,count))
+
 # must be called periodically by the clientId
 class clientAlive(webapp.RequestHandler):
     def post(self):
@@ -67,6 +78,7 @@ application = webapp.WSGIApplication(
       ('/createChannel'     , createChannel)
     , ('/sendToClientId'    , sendToClientId)
     , ('/sendToResource'    , sendToResource)
+    , ('/resourceCount'     , resourceCount)
     , ('/clientAlive'       , clientAlive)
     , ('/clientPurge'       , clientPurge)
     ],

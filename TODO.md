@@ -11,6 +11,12 @@
   * less css
 
 
+### IDEAS
+
+* make a chat widget ala facebook
+* make the mouse demo
+
+
 ### DONE
 
 * DONE make the homepage as being from README.md to something not ugly (like socket.io)
