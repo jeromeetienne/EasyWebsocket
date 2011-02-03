@@ -18,28 +18,28 @@ EasyWebSocket	= function(url, protocols)
 	// extract resource from the url
 	// - the domain part is ignored
 	// - TODO i should take the whole url
-	this.resource	= this.url.match(/.*:\/\/[^/]*\/(.+)/)[1];
+	//this.resource	= this.url.match(/.*:\/\/[^/]*\/(.+)/)[1];
+	this.resource	= this.url;
 
-	if( false ){	// for devel
-		this.iframeOrigin	= "http://localhost:8080";
-	}else{		// for prod
-		this.iframeOrigin	= "http://easywebsocket.appspot.com";
-	}
-	this.iframeUrl	= this.iframeOrigin + "/web/iframe.html";
+	// define the class logging function
+	this.log	= false ? function(){ console.log.apply(console, arguments) } : function(){};
+
+	this.iframeOrigin	= true ? "http://localhost:8080" : "http://easywebsocket.org";
+	this.iframeUrl		= this.iframeOrigin + "/web/iframe.html";
 	this._iframeCtor();
 	
 		
 	this.onopen		= function(){
-		console.log("default onopen")
+		self.log("default onopen")
 	}
 	this.onmessage		= function(event){
-		console.log("default onmessage")
+		self.log("default onmessage")
 	}
 	this.onerror		= function(){
-		console.log("default onerror")
+		self.log("default onerror")
 	}
 	this.onclose		= function(){
-		console.log("default onclose")
+		self.log("default onclose")
 	}
 
 	// bind the "message" dom event
@@ -59,7 +59,7 @@ EasyWebSocket.prototype._onWindowMessage	= function(domEvent)
 	var eventType	= eventFull.type;
 	var eventData	= eventFull.data;
 	// log the event
-	console.log("recevied message from iframe", eventFull)
+	this.log("recevied message from iframe", eventFull)
 	
 	if( eventType == "connected" ){
 		this.onopen();
@@ -113,7 +113,7 @@ EasyWebSocket.prototype._iframeCtor		= function()
 	iframe.style.width	= iframe.style.height = "0";
 	// bind onload
 	iframe.onload	= function(event){
-		console.log("iframe loaded")
+		self.log("iframe loaded")
 		self._iframeSendConnect()
 	}
 	// append the iframe to <body>
@@ -134,7 +134,7 @@ EasyWebSocket.prototype._iframeExist	= function()
 
 EasyWebSocket.prototype._iframeSendRaw	= function(data)
 {
-	console.log("iframeSendRaw(",data,")")
+	this.log("iframeSendRaw(",data,")")
 	var iframeEl	= document.getElementById(this.iframeId).contentWindow;
 	var targetOrigin= "*";	// TODO not sure about this
 	iframeEl.postMessage(JSON.stringify(data), targetOrigin);

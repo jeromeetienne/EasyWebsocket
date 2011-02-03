@@ -7,6 +7,11 @@
 	IFRAME content
 <script>
 jQuery(function(){
+	if( true ){	// to disable all the logging
+		console		= {}
+		console.log	= function(){}
+	}
+	
 	/**
 	 * TODO to the clientAlive call periodically
 	 * TODO rewrite this code it is dirty
