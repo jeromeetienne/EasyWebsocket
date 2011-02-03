@@ -16,7 +16,7 @@ var graph	= true;
 if( graph )	var deltas	= new TimeSeries();
 socket.onopen	= function() {
 	var connectionDelay	= new Date().getTime() - loadDate;
-	jQuery('#cnxTime').text((connectionDelay/1000)+'ms');
+	jQuery('#cnxTime').text((connectionDelay/1000)+'sec');
 	sendPing();
 }
 
