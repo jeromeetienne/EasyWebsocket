@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+	<script src="https://github.com/joewalnes/smoothie/raw/master/smoothie.js"></script>
+	<script src="../easyWebSocket.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script>
+jQuery(function() {
+
+var socket	= new EasyWebSocket("ws://easywebsocket.org/latencytester");
+var localId	= Math.floor(Math.random() * 1000000).toString(32)
+var graph	= true;
+if( graph )	var deltas	= new TimeSeries();
+socket.onopen	= function() {
+	sendPing();
+}
+
+sendPing	= function(){
+	socket.send(localId+" "+new Date().getTime())
+	setTimeout(sendPing, 1*1000)
+}
+
+socket.onmessage = function(event) {
+	var data	= event.data.split(' ')
+	if (data[0] != localId)	return
+	var delta	= new Date().getTime() - data[1];
+	console.log("latency", delta, "ms")  
+	if( graph ) deltas.append(new Date().getTime(), delta);
+}
+
+if(graph){
+	(function(){
+		var chart = new SmoothieChart();
+		chart.addTimeSeries(deltas, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
+		chart.streamTo(document.getElementById("chart"), 1000);
+	})()
+}
+
+})
+</script>
+
+</head>
+<body>
+	<h1>Lantency graph</h1>
+	<canvas id="chart" width="300" height="100"></canvas>
+	
+	<div>
+		chart display from <a href="http://smoothiecharts.org/">smoothiecharts</a>
+	</div>
+</body>
+</html>
