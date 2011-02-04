@@ -7,7 +7,7 @@
 <script>
 jQuery(function() {
 
-var socket	= new EasyWebSocket("ws://easywebsocket.org/latencytester");
+var socket	= new EasyWebSocket("ws://easywebsocket.org/latencytester"+Math.floor(Math.random() * 1000000));
 var localId	= Math.floor(Math.random() * 1000000).toString(32);
 var loadDate	= new Date().getTime();
 var period	= 1*1000;
