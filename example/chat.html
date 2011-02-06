@@ -56,10 +56,14 @@ body {
 }
 
 #container .footer {
+	width	: 100%;
 	margin	: 0.5em;
 	padding	: 0.5em;
 }
 
+#container .footer form input.input {
+	width	: 90%;
+}
 	
 </style>
 	<div id="container">
@@ -98,7 +102,7 @@ body {
 		<div class="footer">
 			<form id="chat-form" action="#">
 				<input class="input" id="chat-input" type="text" />
-				<input id="chat-submit" type="submit" value="Send" />
+				<input class="submit" id="chat-submit" type="submit" value="Send" />
 			</form>
 		</div>
 	</div>
