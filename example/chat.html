@@ -1,0 +1,243 @@
+<html>
+<head>
+	<script src="http://easywebsocket.org/easyWebSocket-min.js"></script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+	<script src="jquery.tmpl.min.js"></script>
+</head>
+<body>
+<style>
+body {
+	background-color: #666;
+}
+#container {
+	position	: absolute;
+	left		: 50%;
+	margin-left	: -480px;
+	width		: 960px;
+	
+	background-color: #F0F0F0;
+
+	border-style	: solid;
+	border-color	: #EEE;
+	border-width	: 1px;
+	border-radius	: 15px;
+}
+#container .header {
+	margin	: 0.5em;
+	padding	: 0.5em;
+}
+#container .header .statusContainer {
+	float	: right;
+}
+#container .header .label {
+}
+#container .header .value {
+	font-size	: 110%;
+	font-weight	: bold;
+}
+#container .chatArea {
+	overflow	: auto;
+	height		: 200px;
+
+	border-style	: solid;
+	border-color	: #888;
+	border-radius	: 15px;
+
+	background-color: #ccc;
+
+	margin		: 10px;
+	padding		: 0.5em;
+}
+
+#container .chatArea .userName {
+	font-size	: 120%;
+	font-weight	: bold;
+}
+
+#container .footer {
+	margin	: 0.5em;
+	padding	: 0.5em;
+}
+
+	
+</style>
+	<div id="container">
+		<div class="header">
+			<div class="statusContainer">
+				<span class="label">Status: </span>
+				<span class="status value">Connecting</span>
+			</div>
+			<div class="userContainer">
+				<span class="label">Username: </span>
+				<span class="username value" id="chat-username"></span>
+				<input class="editButton" type="button" value="Edit" />
+			</div>
+		</div>
+		<div class="chatArea">
+		</div>
+		<script class="tmplChatMessage" type="text/x-jquery-tmpl">
+			<div>
+				<span class="username">${username}</span> :
+				<span class="message">${message}</span>
+			</div>
+		</script>
+		<script class="tmplChatJoin" type="text/x-jquery-tmpl">
+			<div>
+				<span class="username">${username}</span>
+				<span>just joined.</span>
+			</div>
+		</script>
+		<script class="tmplChatRename" type="text/x-jquery-tmpl">
+			<div>
+				<span class="oldUsername username">${oldUsername}</span>
+				<span>is renamed as</span>
+				<span class="newUsername username">${newUsername}</span>
+			</div>
+		</script>
+		<div class="footer">
+			<form id="chat-form" action="#">
+				<input class="input" id="chat-input" type="text" />
+				<input id="chat-submit" type="submit" value="Send" />
+			</form>
+		</div>
+	</div>
+
+	<script>
+		var ChatAnywhere	= function(){
+			
+			var channelName	= "wsanywhere-chat"
+			var username	= "user-"+Math.floor(Math.random()*9999);
+			
+			var statusEl	= document.getElementById("chat-status")
+			var textAreaEl	= document.getElementById("chat-textarea")
+			var usernameEl	= document.getElementById("chat-username")
+			var formEl	= document.getElementById("chat-form");
+			var inputEl	= document.getElementById("chat-input")
+			var submitEl	= document.getElementById("chat-submit");
+
+			var setUsername	= function(username){
+				jQuery("#container .header .username").empty().text(username)
+			}
+			setUsername(username)
+			var setStatus	= function(status){
+				jQuery("#container .header .status").text(status)
+			}
+			var updateChatArea	= function(tmplClass, tmplData){
+				$( "#container ."+ tmplClass).tmpl(tmplData)
+					.appendTo("#container .chatArea");
+				// scroll to the bottom
+				var chatAreaEl	= jQuery("#container .chatArea").get(0);
+				chatAreaEl.scrollTop = jQuery("#container .chatArea").height();
+			}
+			var setMessage	= function(tmplData){
+				updateChatArea("tmplChatMessage", tmplData)
+			}
+			var setJoin	= function(tmplData){
+				updateChatArea("tmplChatJoin", tmplData)
+			}
+			var setRename	= function(tmplData){
+				updateChatArea("tmplChatRename", tmplData)
+			}
+			
+			jQuery("#container .header .editButton").click(function(){
+				var selector	= "#container .header .username";
+				var oldUsername	= jQuery("#container .header .username").text();
+				jQuery(selector).empty();
+				jQuery("<input type='text'/>").attr("value", oldUsername).appendTo(selector);
+				jQuery(selector+ " input").focus();
+				jQuery(selector+ " input").blur(function(){
+					var newUsername	= jQuery(selector+ " input").val();
+					jQuery("#container .footer .input").focus();
+					if( !newUsername )	return;
+					setUsername(newUsername);
+					sendRename(oldUsername, newUsername)
+				})
+			})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+			setJoin({username:"prou"})
+
+			
+			var socketUrl	= "ws://example.com/"+channelName;
+			var socket	= new EasyWebSocket(socketUrl);
+			socket.onopen	= function(){
+				setStatus("Connected");
+				sendJoin(username);
+			}
+			socket.onmessage= function(event){
+				var event	= JSON.parse(event.data);
+				console.log("event", event)
+				if( event.type == "message" ){
+					setMessage(event.data);			
+				}else if( event.type == "join" ){
+					setJoin(event.data);
+				}else if( event.type == "left" ){
+				}else if( event.type == "rename" ){
+					setRename(event.data);
+				}else{
+					console.log("unhandled event in socket message")
+				}
+			}
+			socket.onclose	= function(){
+				setStatus("Closed");
+			}
+			jQuery("#container .footer form").submit(function(){
+				var username	= jQuery("#container .header .username").text()
+				var message	= inputEl.value;
+				if( !message )	return false;
+				sendMessage(username, inputEl.value);
+				inputEl.value	= "";
+				return false;
+			})
+			var socketSend	= function(data){
+				console.log("socketSend", data)
+				socket.send(JSON.stringify(data));
+			}
+			var sendMessage	= function(username, message){
+				socketSend({
+					type	: "message",
+					data	: {
+						username: username,
+						message	: inputEl.value						
+					}
+				});
+			}
+			var sendJoin	= function(username){
+				socketSend({
+					type	: "join",
+					data	: {
+						username: username,
+					}
+				});
+			}
+			var sendLeave	= function(username){
+				socketSend({
+					type	: "leave",
+					data	: {
+						username: username,
+					}
+				});
+			}
+			var sendRename	= function(oldUsername, newUsername){
+				socketSend({
+					type	: "rename",
+					data	: {
+						newUsername: newUsername,
+						oldUsername: oldUsername
+					}
+				});
+			}
+		}
+		var chat	= new ChatAnywhere();
+	</script>	
+</body>
+</html>
