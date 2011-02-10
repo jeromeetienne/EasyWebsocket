@@ -27,8 +27,8 @@
 				<span class="cnxTime data">Connecting</span>
 			</p>
 			<p>
-				<span class="label">Ping Latency:</span>
-				<span class="data">in msec</span>
+				<span class="latency label">Ping Latency:</span>
+				<span class="latency data">in msec</span>
 			</p>
 			<p>
 				<canvas id="chart" width="450" height="100"></canvas>
@@ -36,7 +36,10 @@
 				chart display from <a href="http://smoothiecharts.org/">smoothiecharts</a>
 			</p>
 		</div>
+		<hr/>
 		<div class="footer">
+			Set <code>url</code> to change the WebSocket url, and <code>period</code> in msec to change
+			the latency refresh rate (like <a href="http://easywebsocket.org/contrib/monitor/?period=1000&url=ws://easywebsocket.org/foobar">this</a>)
 		</div>
 	</div>
 </body>

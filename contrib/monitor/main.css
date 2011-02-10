@@ -35,6 +35,10 @@ body {
 	font-size	: 120%;
 }
 
+code {
+	font-weight	: bold;
+}
+
 #container .footer {
 	width	: 100%;
 	margin	: 0.5em;
