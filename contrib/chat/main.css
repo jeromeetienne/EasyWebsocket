@@ -1,0 +1,71 @@
+body {
+	background-color: #666;
+}
+#container {
+	position	: absolute;
+	left		: 50%;
+	margin-left	: -480px;
+	width		: 960px;
+	
+	background-color: #F0F0F0;
+
+	border-style	: solid;
+	border-color	: #EEE;
+	border-width	: 1px;
+	border-radius	: 15px;
+}
+
+#container .header {
+	margin	: 0.5em;
+}
+#container h1 {
+	text-align	: center;
+	font-size	: 250%;
+}
+#container .header .statusContainer {
+	float	: right;
+}
+#container .header .label {
+}
+#container .header .value {
+	font-size	: 110%;
+	font-weight	: bold;
+}
+
+#container .chatArea {
+	overflow	: auto;
+	height		: 200px;
+
+	border-style	: solid;
+	border-color	: #888;
+	border-radius	: 15px;
+
+	background-color: #ccc;
+
+	margin		: 10px;
+	padding		: 0.5em;
+}
+
+#container .chatArea .userName {
+	font-size	: 120%;
+	font-weight	: bold;
+}
+
+#container .footer {
+	width	: 100%;
+	margin	: 0.5em;
+	padding	: 0.5em;
+}
+
+#container .footer hr {
+	margin-right: 2em;
+}
+#container .footer code {
+	font-weight	: bold;
+}
+
+
+#container .footer form input.input {
+	width	: 90%;
+}
+	
