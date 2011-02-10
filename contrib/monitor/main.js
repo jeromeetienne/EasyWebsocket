@@ -1,22 +1,16 @@
-<!doctype html>
-<html>
-<head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-	<script src="http://easywebsocket.org/easyWebSocket-min.js"></script>
-	<script src="https://github.com/joewalnes/smoothie/raw/master/smoothie.js"></script>
-<script>
 jQuery(function() {
-
-var socket	= new EasyWebSocket("ws://easywebsocket.org/latencytester"+Math.floor(Math.random() * 1000000));
+var url		= "ws://easywebsocket.org/latencytester"+Math.floor(Math.random() * 1000000);
+var socket	= new EasyWebSocket(url);
 var localId	= Math.floor(Math.random() * 1000000).toString(32);
 var loadDate	= new Date().getTime();
-var period	= 1*1000;
-var counter	= 0;
+var period	= 0.5*1000;
 var graph	= true;
 if( graph )	var deltas	= new TimeSeries();
 socket.onopen	= function() {
+	// update .cnxTime.data
 	var connectionDelay	= new Date().getTime() - loadDate;
-	jQuery('#cnxTime').text((connectionDelay/1000)+'sec');
+	jQuery(".content .cnxTime.data").text(connectionDelay+'-msec');
+	// send the first ping to myself
 	sendPing();
 }
 
@@ -29,8 +23,7 @@ socket.onmessage = function(event) {
 	var data	= event.data.split(' ')
 	if (data[0] != localId)	return
 	var delta	= new Date().getTime() - data[1];
-	console.log("latency #"+counter, delta, "ms")
-	counter++;
+	//console.log("delta", delta)
 	if( graph ) deltas.append(new Date().getTime(), delta);
 }
 
@@ -42,17 +35,7 @@ if(graph){
 	})()
 }
 
-})
-</script>
+// update .url.data
+jQuery(".content .url.data").text(url);
 
-</head>
-<body>
-	<b>Connection time: </b><span id="cnxTime">Connecting</span>
-	<h2>Latency graph</h2>
-	<canvas id="chart" width="300" height="100"></canvas>
-	
-	<div>
-		chart display from <a href="http://smoothiecharts.org/">smoothiecharts</a>
-	</div>
-</body>
-</html>
+})

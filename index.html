@@ -48,7 +48,10 @@
 	hr { border: 0; width: 80%; border-bottom: 1px solid #aaa;
 		margin-bottom	: 3em;
 	}
-	b {
+	.tutorial {
+		font-weight	: bolder;
+	}
+	.tutorial b {
 		font-size	: 1.2em;
 	}
 	.footer { text-align:center; padding-top:30px; font-style: italic; }
@@ -84,20 +87,21 @@
             alert("received "+ event.data)
         }
     &lt;/script&gt;</pre>
-			<p>See this code <a href="http://easywebsocket.org/example/example.html">live</a>.
-			No server setup, no cross-origin issue to care about... <b>It is that easy!</b>
-			</p>
-			<p>				
+			<p class="tutorial">				
 				<b>Step 1:</b> You connect the socket to a given url
 			</p>
-			<p>
-				<b>Step 2:</b> What you send() thru this socket gonna be sent to all sockets connected the same url
+			<p class="tutorial">
+				<b>Step 2:</b> What you send() thru this socket is sent to all sockets connected the same url
+			</p>
+			<p>See this code <a href="http://easywebsocket.org/example/example.html">live</a>.
+			No server setup, no cross-origin issue to care about... <b>It is that easy!</b>
 			</p>
 		<h2>Demo</h2>
 			<p>
 			Seeing it work is always nice. Here is a little
-			<a href="http://easywebsocket.org/example/chat.html">chat application</a>
+			<a href="http://easywebsocket.org/contrib/chat">chat application</a>
 			on top of EasyWebSocket.
+			It is possible to <a href="http://easywebsocket.org/contrib/monitor/">monitor EasyWebSocket time efficiency</a>.
 			</p>
 		<h2>Code</h2>
 			<p>

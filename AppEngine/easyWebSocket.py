@@ -14,6 +14,7 @@ class Client(db.Model):
     timestamp   = db.DateTimeProperty()
 
 # jsonp call which return the token to create the channel in .js
+# - TODO should this return the idleTimeout period too ?
 class createChannel(webapp.RequestHandler):
     def get(self):
         clientId    = self.request.get("clientId");
@@ -46,6 +47,8 @@ class sendToResource(webapp.RequestHandler):
             channel.send_message(client.clientId, message);
 
 # count the number of client on a given resource
+# - i dont think this one is used. for use this is out of the usual
+#   WebSocket API.
 class resourceCount(webapp.RequestHandler):
     def post(self):
         resource    = self.request.get("resource");

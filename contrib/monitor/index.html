@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+	<link rel="stylesheet" href="main.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+	<script src="jQuery.url.js"></script>
+	<script src="http://easywebsocket.org/easyWebSocket-min.js"></script>
+	<script src="https://github.com/joewalnes/smoothie/raw/master/smoothie.js"></script>
+	<script src="main.js"></script>
+</head>
+<body>
+	<div id="container">
+		<div class="header">
+			<h1>EasyWebSocket Monitor</h1>
+			<p>
+				This page monitors <a href="http://easywebsocket.org">EasyWebSocket</a> time efficiency.
+			</p>
+		</div>
+		<hr/>
+		<div class="content">
+			<p>
+				<span class="url label">Url:</span>
+				<span class="url data"></span>
+			</p>
+			<p>
+				<span class="cnxTime label">Connection Time:</span>
+				<span class="cnxTime data">Connecting</span>
+			</p>
+			<p>
+				<span class="label">Ping Latency:</span>
+				<span class="data">in msec</span>
+			</p>
+			<p>
+				<canvas id="chart" width="450" height="100"></canvas>
+				<br>
+				chart display from <a href="http://smoothiecharts.org/">smoothiecharts</a>
+			</p>
+		</div>
+		<div class="footer">
+		</div>
+	</div>
+</body>
+</html>
