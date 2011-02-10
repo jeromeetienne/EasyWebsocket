@@ -1,0 +1,42 @@
+body {
+	background-color: #666;
+}
+#container {
+	position	: absolute;
+	left		: 50%;
+	margin-left	: -240px;
+	width		: 480px;
+	
+	background-color: #F0F0F0;
+
+	border-style	: solid;
+	border-color	: #EEE;
+	border-width	: 1px;
+	border-radius	: 15px;
+}
+#container .header {
+	margin	: 0.5em;
+	padding	: 0.5em;
+}
+#container .header {
+	text-align	: center;
+}
+#container .header p {
+	text-align	: left;
+}
+
+#container .content {
+	margin		: 10px;
+	padding		: 0.5em;
+}
+
+#container .label {
+	font-weight	: bold;
+	font-size	: 120%;
+}
+
+#container .footer {
+	width	: 100%;
+	margin	: 0.5em;
+	padding	: 0.5em;
+}

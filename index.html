@@ -48,6 +48,12 @@
 	hr { border: 0; width: 80%; border-bottom: 1px solid #aaa;
 		margin-bottom	: 3em;
 	}
+	.tutorial {
+		font-weight	: bolder;
+	}
+	.tutorial b {
+		font-size	: 1.2em;
+	}
 	.footer { text-align:center; padding-top:30px; font-style: italic; }
 	</style> 
 </head>  
@@ -81,24 +87,29 @@
             alert("received "+ event.data)
         }
     &lt;/script&gt;</pre>
-			<p>No server setup, no cross-origin issue to care about... nothing!
+			<p class="tutorial">				
+				<b>Step 1:</b> You connect the socket to a given url
 			</p>
-			<p>You are done,
-			see it <a href="http://easywebsocket.org/example/example.html">live</a>.
+			<p class="tutorial">
+				<b>Step 2:</b> What you send() thru this socket is sent to all sockets connected the same url
 			</p>
-			<p>
-			The API is copied on the <a href="http://dev.w3.org/html5/websockets/">standard API</a>, thus
-			compatible and easy to learn.
+			<p>See this code <a href="http://easywebsocket.org/example/example.html">live</a>.
+			No server setup, no cross-origin issue to care about... <b>It is that easy!</b>
 			</p>
 		<h2>Demo</h2>
 			<p>
-			Seeing it work is always nice. Here is a <a href="http://easywebsocket.org/example/demo.html">demo</a>
-			of a little chat application on top of EasyWebSocket.
+			Seeing it work is always nice. Here is a little
+			<a href="http://easywebsocket.org/contrib/chat">chat application</a>
+			on top of EasyWebSocket.
+			It is possible to <a href="http://easywebsocket.org/contrib/monitor/">monitor EasyWebSocket time efficiency</a>.
 			</p>
 		<h2>Code</h2>
 			<p>
-			The code is available on github at <a href="http://github.com/jeromeetienne/EasyWebsocket">jeromeetienne/EasyWebSocket</a>
+			EasyWebSocket is written by <a href="http://jetienne.com">Jerome Etienne</a>.
+			The code is available on github at <a href="http://github.com/jeromeetienne/EasyWebsocket">EasyWebSocket</a>
 			under <a href="https://github.com/jeromeetienne/EasyWebsocket/raw/master/MIT-LICENSE.txt">MIT license</a>.
+			The API is copied on the <a href="http://dev.w3.org/html5/websockets/">WebScocket standard API</a>, thus
+			compatible and easy to learn.
 			</p>
 	</div> 
 </body> 
