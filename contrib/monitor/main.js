@@ -1,9 +1,9 @@
 jQuery(function() {
-var url		= "ws://easywebsocket.org/latencytester"+Math.floor(Math.random() * 1000000);
+var url		= jQuery.url.param("url") || "ws://easywebsocket.org/latencytester"+Math.floor(Math.random() * 1000000);
 var socket	= new EasyWebSocket(url);
 var localId	= Math.floor(Math.random() * 1000000).toString(32);
 var loadDate	= new Date().getTime();
-var period	= 0.5*1000;
+var period	= jQuery.url.param("period")	|| 0.5*1000;
 var graph	= true;
 if( graph )	var deltas	= new TimeSeries();
 socket.onopen	= function() {
@@ -37,5 +37,6 @@ if(graph){
 
 // update .url.data
 jQuery(".content .url.data").text(url);
+jQuery(".content .latency.data").text("refreshed every "+period+"-msec");
 
 })
