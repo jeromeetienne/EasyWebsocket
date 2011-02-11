@@ -32,6 +32,9 @@ Rockps.Move.getRandom	= function(){
 	var idx		= Math.floor(Math.random() * moves.length)
 	return new Rockps.Move(moves[idx]);
 }
+Rockps.Move.prototype.label	= function(){
+	return this.value.charAt(0).toUpperCase() + this.value.slice(1);
+}
 Rockps.Move.prototype.imageUrl	= function(){
 	var imageUrls	= {
 		"rock"		: "image/rock.png",
@@ -49,7 +52,8 @@ Rockps.Move.prototype.display	= function(container){
 		.attr('width', 128)
 		.attr('height', 128)
 		.attr("src", this.imageUrl())
-		.replaceAll(container);	
+		.replaceAll(container+" .move");
+	jQuery(container+" .moveName").text(this.label());
 }
 /**
  * @return {Boolean} true if the move may be from a player, false otherwise
@@ -92,8 +96,8 @@ Rockps.Result.LOSS	= "loss";
 
 Rockps.Result.prototype.display	= function(container){
 	var texts	= {
-		"win"	: "You Won!! congratulation",
-		"draw"	: "Draw. great minds meet each other",
+		"win"	: "You Won!! Congratulation.",
+		"draw"	: "Draw. Great minds think alike.",
 		"loss"	: "You lose... Better luck next time ?"
 	}
 	jQuery("<p>")
@@ -126,8 +130,8 @@ console.log("myMove", myMove);
 	var remoteMove	= Rockps.Move.getRandom();
 	var result	= localMove.decideResult(remoteMove);
 	// display everything
-	localMove	.display(".content .playerContainer.localPlayer .move");
-	remoteMove	.display(".content .playerContainer.remotePlayer .move");
+	localMove	.display(".content .playerContainer.localPlayer");
+	remoteMove	.display(".content .playerContainer.remotePlayer");
 	result		.display(".content .resultContainer");
 })();
 

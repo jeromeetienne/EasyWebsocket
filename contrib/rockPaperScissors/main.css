@@ -1,5 +1,5 @@
 body {
-	background: #D0D0D0;
+	background: #E0E0E0;
 }
 .content .playerContainer.remotePlayer {
 	float	: right;
@@ -25,13 +25,11 @@ body {
 	border-width	: 2px;
 	border-radius	: 30px;	
 	
-	padding-top	: 2em;
-	padding-bottom	: 2em;
-	
 	background-color: #CCC;
 }
 
-.content .playerContainer .owner {
+.content .playerContainer .owner,
+.content .playerContainer .moveName {
 	display		: block;
 	text-align	: center;
 	font-weight	: bolder;
