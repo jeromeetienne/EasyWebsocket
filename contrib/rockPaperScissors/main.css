@@ -1,0 +1,43 @@
+body {
+	background: #E0E0E0;
+}
+.content .playerContainer.remotePlayer {
+	float	: right;
+}
+
+.content .playerContainer.remotePlayer img {
+	/* Mirror X */
+        -moz-transform		: scaleX(-1);
+        -o-transform		: scaleX(-1);
+        -webkit-transform	: scaleX(-1);
+        transform		: scaleX(-1);
+}
+
+.content .playerContainer.localPlayer {
+	float		: left;
+}
+.content .playerContainer {
+	border-style	: solid;
+	border-color	: red;
+
+	border-color	: #888;
+	border-style	: solid;
+	border-width	: 2px;
+	border-radius	: 30px;	
+	
+	background-color: #CCC;
+}
+
+.content .playerContainer .owner,
+.content .playerContainer .moveName {
+	display		: block;
+	text-align	: center;
+	font-weight	: bolder;
+	font-size	: 200%;
+}
+
+.content .resultContainer {
+	text-align	: center;
+	font-weight	: bolder;
+	font-size	: 200%;
+}

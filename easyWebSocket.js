@@ -22,9 +22,9 @@ EasyWebSocket	= function(url, protocols)
 	this.resource	= this.url;
 
 	// define the class logging function
-	this.log	= false ? function(){ console.log.apply(console, arguments) } : function(){};
+	this.log	= EasyWebSocket.logFunction;
 
-	this.iframeOrigin	= false ? "http://localhost:8080" : "http://easywebsocket.appspot.com";
+	this.iframeOrigin	= EasyWebSocket.iframeOrigin;
 	this.iframeUrl		= this.iframeOrigin + "/web/iframe.html";
 	this._iframeCtor();
 	
@@ -170,3 +170,17 @@ EasyWebSocket.STATE.CONNECTING	= 0;
 EasyWebSocket.STATE.OPEN		= 1;
 EasyWebSocket.STATE.CLOSING		= 2;
 EasyWebSocket.STATE.CLOSED		= 3;
+
+
+/**
+ * Various constant
+ * 
+ * * Devel values
+ *   * EasyWebSocket.iframeOrigin	= "http://localhost:8080";
+ *   * EasyWebSocket.logFunction	= function(){ console.log.apply(console, arguments) }
+*/
+EasyWebSocket.iframeOrigin	= "http://easywebsocket.appspot.com";
+EasyWebSocket.logFunction	= function(){}
+
+
+
