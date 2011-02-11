@@ -13,6 +13,13 @@ help:
 server:
 	$(GAE_ROOT)/dev_appserver.py .
 
+
+docs:
+	dox	--title "html5-RockPaperScissors"		\
+		--desc "RockPaperScissors on WebSocket"		\
+		contrib/rockPaperScissors/main.js		\
+		> contrib/rockPaperScissors/doc.html
+
 minify:
 	closurec --js easyWebSocket.js --js_output_file easyWebSocket-min.js
 
