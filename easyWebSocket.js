@@ -15,10 +15,12 @@ EasyWebSocket	= function(url, protocols)
 	var self	= this;
 	// standard: readonly attribute DOMString url;
 	this.url	= url;
+	// create a dummy bufferedAmount property. it is in WebSocket Standard
+	this.bufferedAmount	= 0;
+	// create the readyState property
+	this.readyState		= EasyWebSocket.CONNECTING;
+	
 	// extract resource from the url
-	// - the domain part is ignored
-	// - TODO i should take the whole url
-	//this.resource	= this.url.match(/.*:\/\/[^/]*\/(.+)/)[1];
 	this.resource	= this.url;
 
 	// define the class logging function
@@ -29,6 +31,7 @@ EasyWebSocket	= function(url, protocols)
 	
 	// TODO here there is an issue with domReady
 	// - document.readyState == "complete"
+	// - do i need it ? super unsure
 	this._iframeCtor();
 	
 		
@@ -65,6 +68,7 @@ EasyWebSocket.prototype._onWindowMessage	= function(domEvent)
 	this.log("recevied message from iframe", eventFull)
 	
 	if( eventType == "connected" ){
+		this.readyState	= EasyWebSocket.OPEN;
 		this.onopen();
 	}else if( eventType == "data" ){
 		this.onmessage({ data : eventData });
@@ -90,7 +94,9 @@ EasyWebSocket.prototype.send	= function(data)
 */
 EasyWebSocket.prototype.close	= function()
 {
+	this.readyState	= EasyWebSocket.CLOSING;
 	this._iframeDtor();
+	this.readyState	= EasyWebSocket.CLOSED;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -169,12 +175,13 @@ EasyWebSocket.prototype._iframeSendData	= function(message)
 
 /**
  * Possible values for .readyState
+ *
+ * - thoses values are part of the standard
 */
-EasyWebSocket.STATE	= {}
-EasyWebSocket.STATE.CONNECTING	= 0;
-EasyWebSocket.STATE.OPEN		= 1;
-EasyWebSocket.STATE.CLOSING		= 2;
-EasyWebSocket.STATE.CLOSED		= 3;
+EasyWebSocket.CONNECTING	= 0;
+EasyWebSocket.OPEN		= 1;
+EasyWebSocket.CLOSING		= 2;
+EasyWebSocket.CLOSED		= 3;
 
 
 /**

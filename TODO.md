@@ -1,8 +1,11 @@
 ### TODO
 
 * implement clientAlive in the iframe
+  * return the period in the open
 * implement the task in AppEngine to obsolete people
+  * how to test this ?
 * handle the execption send sending a message
+* 
 
 * to make a demo on the home page which display the mouse of others
   * funnier than a chat
