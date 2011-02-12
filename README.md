@@ -9,9 +9,9 @@ The API is copied on [Websocket standard API](http://dev.w3.org/html5/websockets
 
 # How to use it
 
-Just include the following in your webpage. see it [live](http://jeromeetienne.github.com/EasyWebsocket/example/example.html)
+Just include the following in your webpage. see it [live](http://easywebsocket.org/example/example.html)
 
-    <script src="http://jeromeetienne.github.com/EasyWebsocket/web/easyWebSocket-min.js"></script>	
+    <script src="http://EasyWebsocket.org/easyWebSocket.min.js"></script>	
     <script>
         var socket = new EasyWebSocket("ws://example.com/resource");
         socket.onopen	= function(){

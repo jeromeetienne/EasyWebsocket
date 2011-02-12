@@ -21,9 +21,9 @@ docs:
 		> contrib/rockPaperScissors/doc.html
 
 minify:
-	closurec --js easyWebSocket.js --js_output_file easyWebSocket-min.js
+	closurec --js easyWebSocket.js --js_output_file easyWebSocket.min.js
 
-deploy	: minify deployAppEngine deployGhPage
+deploy	: minify deployGhPage deployAppEngine 
 
 deployAppEngine:
 	$(GAE_ROOT)/appcfg.py update .

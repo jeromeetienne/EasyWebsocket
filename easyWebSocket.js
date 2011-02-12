@@ -26,6 +26,9 @@ EasyWebSocket	= function(url, protocols)
 
 	this.iframeOrigin	= EasyWebSocket.iframeOrigin;
 	this.iframeUrl		= this.iframeOrigin + "/web/iframe.html";
+	
+	// TODO here there is an issue with domReady
+	// - document.readyState == "complete"
 	this._iframeCtor();
 	
 		
@@ -99,6 +102,8 @@ EasyWebSocket.prototype._iframeCtor		= function()
 	var self	= this;
 	this.iframeId	= "EasyWebSocket-iframe-"+Math.floor(Math.random()*99999);
 
+	// ensure dom is ready for element creation
+	console.assert( document.readyState == "complete" );
 	// create the iframe element
 	var iframe	= document.createElement('iframe');
 	// the html page calling ChannelAPI MUST run he same site as channelAPI server
