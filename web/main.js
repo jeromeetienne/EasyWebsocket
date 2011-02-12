@@ -9,6 +9,7 @@
 */
 
 // TODO do i need jquery ??? why ?
+// - i use jQuery for ajax stuff
 jQuery(function(){
 	if( true ){	// to disable all the logging
 		console		= {}

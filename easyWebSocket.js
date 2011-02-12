@@ -2,6 +2,8 @@
  * like Websocket, but with no servers to setup
  *
  * * http://dev.w3.org/html5/websockets/ websocket specification
+ * * TODO replace this.resource by this.url everywhere. this resource things
+ *   is not suitable
 */
 
 /**
@@ -12,9 +14,9 @@
 */
 EasyWebSocket	= function(url, protocols)
 {
-	var self	= this;
+	var self		= this;
 	// standard: readonly attribute DOMString url;
-	this.url	= url;
+	this.url		= url;
 	// create a dummy bufferedAmount property. it is in WebSocket Standard
 	this.bufferedAmount	= 0;
 	// create the readyState property
@@ -34,7 +36,7 @@ EasyWebSocket	= function(url, protocols)
 	// - do i need it ? super unsure
 	this._iframeCtor();
 	
-		
+	// TODO put that in a loop
 	this.onopen		= function(){
 		self.log("default onopen")
 	}
@@ -53,11 +55,14 @@ EasyWebSocket	= function(url, protocols)
 	window.addEventListener("message", function(domEvent){
 		// if event is not from the iframe, return now
 		if( domEvent.origin != self.iframeOrigin )	return;
-		// notify the local handler		
+		// notify the local handler
 		self._onWindowMessage(domEvent)
 	}, false);
 }
 
+/**
+ * Handle message from the child <iframe>
+*/
 EasyWebSocket.prototype._onWindowMessage	= function(domEvent)
 {		
 	// parse the event from the iframe
@@ -103,6 +108,10 @@ EasyWebSocket.prototype.close	= function()
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+
+/**
+ * Build the iframe
+*/
 EasyWebSocket.prototype._iframeCtor		= function()
 {
 	var self	= this;
@@ -138,6 +147,9 @@ EasyWebSocket.prototype._iframeDtor		= function()
 	iframe.parent.removeChild(iframe);
 }
 
+/**
+ * @returns {Boolean} true if the iframe exists, false otherwise
+*/
 EasyWebSocket.prototype._iframeExist	= function()
 {
 	return this.iframeId;
@@ -183,9 +195,8 @@ EasyWebSocket.OPEN		= 1;
 EasyWebSocket.CLOSING		= 2;
 EasyWebSocket.CLOSED		= 3;
 
-
 /**
- * Various constant
+ * Configuration
  * 
  * * Devel values
  *   * EasyWebSocket.iframeOrigin	= "http://localhost:8080";
