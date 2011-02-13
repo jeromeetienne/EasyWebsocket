@@ -4,8 +4,8 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /web
-  static_dir: web
+- url: /iframe
+  static_dir: iframe
 
 - url: /examples
   static_dir: examples
