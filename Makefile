@@ -17,8 +17,8 @@ server:
 docs:
 	dox	--title "html5-RockPaperScissors"		\
 		--desc "RockPaperScissors on WebSocket"		\
-		web/main.js					\
-		> web/doc/index.html
+		iframe/main.js					\
+		> iframe/doc/index.html
 
 minify:
 	closurec --js easyWebSocket.js --js_output_file easyWebSocket.min.js
@@ -32,6 +32,6 @@ deployGhPage:
 	rm -rf /tmp/EasyWebsocketGhPages	
 	(cd /tmp && git clone git@github.com:jeromeetienne/EasyWebsocket.git EasyWebsocketGhPages)
 	(cd /tmp/EasyWebsocketGhPages && git checkout gh-pages)
-	cp -a *.html *.js CNAME ./web ./example ./contrib /tmp/EasyWebsocketGhPages
+	cp -a *.html *.js CNAME ./iframe ./example ./contrib /tmp/EasyWebsocketGhPages
 	(cd /tmp/EasyWebsocketGhPages && git add . && git commit -a -m "Another deployement" && git push origin gh-pages)
 	#rm -rf /tmp/EasyWebsocketGhPages
