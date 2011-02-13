@@ -1,17 +1,15 @@
 ### TODO
 
-* implement clientAlive in the iframe
-  * return the period in the open
-* implement the task in AppEngine to obsolete people
-  * how to test this ?
-* handle the execption send sending a message
-* 
 
 * to make a demo on the home page which display the mouse of others
   * funnier than a chat
   * less css
   * got one by stagas
-* DONE make the chat example not ugly
+* DONE implement clientAlive in the iframe
+  * return the period in the open
+* DONE implement the task in AppEngine to obsolete people
+  * how to test this ?
+* DONE handle the execption send sending a message* DONE make the chat example not ugly
   * most people will see only this, so it is important
 * DONE should i get a domain or not
   * currently homepage of the project is http://jeromeetienne.github.com/EasyWebSocket
