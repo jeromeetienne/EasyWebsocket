@@ -107,6 +107,7 @@ IframeMain.prototype.channelConnect	= function(){
 		// update the ping period with the number recomended by the server
 		self.pingPeriod	= result.clientAliveRefresh;
 		console.log("clientAliveRefresh", result.clientAliveRefresh)
+		console.log("token", result.token)
 		// start creating the ctor
 		self.channelCtor(result.token);
 	});
@@ -166,7 +167,7 @@ IframeMain.prototype.parentWindowMessageRecv	= function(domEvent){
 	if( eventType == "connect" ){
 		// set the wsUrl for this iframe
 		this.wsUrl	= eventData.wsUrl;
-		this.channelConnect(eventData.wsUrl)
+		this.channelConnect()
 		this.pingCtor();
 	}else if( eventType == "data" ){
 		this.channelSend(eventData.message);
