@@ -163,12 +163,18 @@ EasyWebSocket.prototype._iframeSendRaw	= function(data)
 	iframeEl.postMessage(JSON.stringify(data), targetOrigin);
 }
 
+/**
+ * * TODO this should not be there ?
+ *   * why not put this url in the iframe url ?
+ *   * and iframe to parse its location.href on load ?
+ * 
+*/
 EasyWebSocket.prototype._iframeSendConnect	= function()
 {
 	var data	= {
 		type	: "connect",
 		data	: {
-			resource	: this.resource
+			wsUrl	: this.resource
 		}
 	}
 	this._iframeSendRaw(data);
@@ -200,7 +206,7 @@ EasyWebSocket.CLOSED		= 3;
  * 
  * * Devel values
  *   * EasyWebSocket.iframeOrigin	= "http://localhost:8080";
- *   * EasyWebSocket.logFunction	= function(){ console.log.apply(console, arguments) }
+ *   * EasyWebSocket.logFunction	= console.log.bind(console);
 */
 EasyWebSocket.iframeOrigin	= "http://easywebsocket.appspot.com";
 EasyWebSocket.logFunction	= function(){}
