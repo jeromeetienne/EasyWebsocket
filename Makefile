@@ -17,8 +17,8 @@ server:
 docs:
 	dox	--title "html5-RockPaperScissors"		\
 		--desc "RockPaperScissors on WebSocket"		\
-		contrib/rockPaperScissors/main.js		\
-		> contrib/rockPaperScissors/doc.html
+		web/main.js					\
+		> web/doc/index.html
 
 minify:
 	closurec --js easyWebSocket.js --js_output_file easyWebSocket.min.js

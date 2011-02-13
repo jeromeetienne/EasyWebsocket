@@ -5,8 +5,10 @@
 <body>
 	<script>
 		var basicTest	= function(){
+			// setup EasyWebSocket for local server + loggin
 			EasyWebSocket.iframeOrigin	= "http://localhost:8080";
 			EasyWebSocket.logFunction	= function(){ console.log.apply(console, arguments) }
+
 
 			var url		= "ws://example.com/superwa/wa"
 			var socket 	= new EasyWebSocket(url);
