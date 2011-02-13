@@ -1,13 +1,8 @@
 /*!
  * javascript main run in the iframe
  *
- * * TODO make a class for main
- * * needed to clean up
- * * TODO to the clientAlive call periodically
  * * make a dox page
- * * TODO rewrite this code it is dirty
 */
-
 
 /**
  * Iframe Main handle the behavior of the iframe
@@ -17,87 +12,119 @@
  * ctor/dtor
 */
 var IframeMain	= function(){
-	this.connectedRsc	= null;
+	/**
+	 * the websocket URL used in this iframe
+	 * 
+	 * @type String
+	*/
+	this.wsUrl	= null;
+
+	/**
+	 * TODO what 
+	*/
+	this.clientId	= "ezChannel"+Math.floor(Math.random()*9999999).toString(36);
+	
+	/**
+	 * period at which ping is called
+	 * 
+	 * @type Integer
+	*/
+	this.pingPeriod	= 1*1000;
+
+	// init this object
 	this.log		= IframeMain.log;
+	// create the parentWindow and wait for message
 	this.parentWindowMessageCtor()
 }
 IframeMain.prototype.destroy	= function(){
+	this.pingDtor();
+	this.parentWindowMessageDtor();
+	this.channelDtor();
 }
 
 /**
  * Log function for the class
 */
-//IframeMain.log	= function(){}
-IframeMain.log	= function(){ console.log.apply(console, arguments) }
+IframeMain.log	= function(){}
+//IframeMain.log	= console.log.bind(console);
 
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-IframeMain.prototype.channelCtor	= function(token, resource, clientId){
-	console.log("create channel", token)
-	var self	= this;
+IframeMain.prototype.channelCtor	= function(token){
+	this.log("create channel", token)
+	// create the socket
 	var channel	= new goog.appengine.Channel(token);
 	var socket	= channel.open();
-
-	socket.onopen	= function(){
-		self.log("channel connected resource", resource)
-		self.connectedRsc	= resource;
-		
-		// send the clientId to the parent window
-		var data	= {
-			type	: "connected",
-			data	: {
-				clientId	: clientId
-			}
-		}
-		self.parentWindowMessageSend(data);
-	}
-	socket.onclose	= function(){
-		self.log("channel closed")
-	}
-	socket.onerror	= function(error){
-		self.log("channel error", error)
-	}
-	socket.onmessage= function(message, opt_param){
-		self.log("got message", message, opt_param)
-		self.parentWindowMessageSend({
-			type	: "data",
-			data	: message.data
-		});
-	}
+	// binds callbacks
+	socket.onopen	= this.channelOnOpen.bind(this);
+	socket.onopen	= this.channelOnOpen.bind(this);
+	socket.onclose	= this.channelOnClose.bind(this);
+	socket.onerror	= this.channelOnError.bind(this);
+	socket.onmessage= this.channelOnMessage.bind(this);
+}
+IframeMain.prototype.channelDtor	= function(){
+	
 }
 
-IframeMain.prototype.channelConnect	= function(resource){
+IframeMain.prototype.channelOnOpen	= function(){
+	this.log("channel connected wsUrl", this.wsUrl)
+	// send the clientId to the parent window
+	this.parentWindowMessageSend({
+		type	: "connected",
+		data	: {
+			clientId	: self.clientId
+		}
+	});
+}
+IframeMain.prototype.channelOnClose	= function(){
+	this.log("channel closed")
+}
+IframeMain.prototype.channelOnError	= function(error){
+	this.log("channel error", error)
+}
+IframeMain.prototype.channelOnMessage	= function(message, opt_param){
+	this.log("got message", message, opt_param)
+	this.parentWindowMessageSend({
+		type	: "data",
+		data	: message.data
+	});	
+}
+
+/**
+ * Send a query to the server to create a channel and get its identifying token
+*/
+IframeMain.prototype.channelConnect	= function(){
 	var self	= this;
-	var clientId	= "ezChannel"+Math.floor(Math.random()*99999);		
 	var callUrl	= "/createChannel"
 				+ "?callback=?"
-				+ "&resource="	+ encodeURIComponent(resource)
-				+ "&clientId="	+ encodeURIComponent(clientId);
+				+ "&wsUrl="	+ encodeURIComponent(this.wsUrl)
+				+ "&clientId="	+ encodeURIComponent(this.clientId);
 	this.log("callUrl", callUrl)
-	jQuery.getJSON(callUrl, function(token){
-		self.channelCtor(token, resource, clientId);
+	jQuery.getJSON(callUrl, function(result){
+		// update the ping period with the number recomended by the server
+		self.pingPeriod	= result.clientAliveRefresh;
+		console.log("clientAliveRefresh", result.clientAliveRefresh)
+		// start creating the ctor
+		self.channelCtor(result.token);
 	});
 }
 
-	
 /**
  * Send message to AppEngine REST API
 */
-IframeMain.prototype.channelSend	= function(resource, message){
+IframeMain.prototype.channelSend	= function(message){
 	var self	= this;
-	var callUrl	= "/sendToResource"
-				+ "?resource="	+ encodeURIComponent(resource)
+	var callUrl	= "/sendToWebsocketUrl"
+				+ "?wsUrl="	+ encodeURIComponent(this.wsUrl)
 				+ "&message="	+ encodeURIComponent(message);
-	this.log("sendToResource callurl", callUrl)
+	this.log("sendToWebsocketUrl callurl", callUrl)
 	jQuery.post(callUrl, function(result){
-		self.log("message sent")
+		self.log("message sent ", message)
 	})
 }
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +137,7 @@ IframeMain.prototype.parentWindowMessageCtor	= function(){
 		// ignore the message received due to ChannelAPI itself
 		if(event.origin == "http://talkgadget.google.com")	return;
 		// log the event
-		console.log("recevied message from caller", event)
+		self.log("recevied message from caller", event)
 		self.parentWindowMessageRecv(event);		
 	}, false);		
 }
@@ -122,7 +149,7 @@ IframeMain.prototype.parentWindowMessageDtor	= function(){
  * notify the parent window
 */
 IframeMain.prototype.parentWindowMessageSend	= function(data){
-	console.log("iframe notify", data)
+	this.log("iframe notify", data)
 	window.parent.postMessage(JSON.stringify(data), "*");
 }
 
@@ -135,21 +162,46 @@ IframeMain.prototype.parentWindowMessageRecv	= function(domEvent){
 	var eventType	= eventFull.type;
 	var eventData	= eventFull.data;
 
-	console.log("eventType", eventType, "eventData", eventData)
+	this.log("eventType", eventType, "eventData", eventData)
 	if( eventType == "connect" ){
-		this.channelConnect(eventData.resource)
+		// set the wsUrl for this iframe
+		this.wsUrl	= eventData.wsUrl;
+		this.channelConnect(eventData.wsUrl)
+		this.pingCtor();
 	}else if( eventType == "data" ){
-		this.channelSend(this.connectedRsc, eventData.message);
+		this.channelSend(eventData.message);
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+IframeMain.prototype.pingCtor	= function(){
+	this.pingTimeoutId	= setTimeout(this.pingCallback.bind(this), this.pingPeriod);
+}
+
+IframeMain.prototype.pingDtor	= function(){
+	if( !this.pingTimeoutId )	return;
+	clearInterval(this.pingTimeoutId);
+	this.pingTimeoutId	= null;
+}
+
+IframeMain.prototype.pingCallback	= function(){
+	var self	= this;
+	var callUrl	= "/clientAlive"
+				+ "?clientId="	+ encodeURIComponent(this.clientId);
+	this.log("callUrl", callUrl)
+	jQuery.post(callUrl, function(){
+		self.log("ping sent at", new Date())
+	});
+	// relaunch the timer
+	this.pingTimeoutId	= setTimeout(this.pingCallback.bind(this), this.pingPeriod);
+}
 
 
 jQuery(function(){
-	if( true ){	// to disable all the logging
-		console		= {}
-		console.log	= function(){}
-	}
+	IframeMain.log	= console.log.bind(console);
 	var iframeMain	= new IframeMain();
 });
 

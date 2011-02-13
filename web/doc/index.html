@@ -110,31 +110,6 @@ code .this { color: #19469D; }</style>
 	<body>
 <table id="source"><tbody><tr><td><h1>html5-RockPaperScissors</h1><p>RockPaperScissors on WebSocket</p></td><td></td></tr><tr class="filename"><td><h2 id="web/main.js"><a href="#">main</a></h2></td><td>web/main.js</td></tr><tr class="code">
 <td class="docs">
-<hr></hr>
-
-<p>Super function</p>
-
-<ul><li>TODO do i need jquery ??? why ?</li><li>i use jQuery for ajax stuff</li></ul>
-
-<hr></hr>
-</td>
-<td class="code">
-<pre><code><span class="variable">jQuery</span>(<span class="keyword">function</span>(){
-	<span class="keyword">if</span>( <span class="variable">true</span> ){	<span class="comment">// to disable all the logging</span>
-		<span class="variable">console</span>		= {}
-		<span class="variable">console</span>.<span class="variable">log</span>	= <span class="keyword">function</span>(){}
-	}
-	
-
-	<span class="keyword">var</span> <span class="variable">connectedRsc</span>		= <span class="keyword">null</span>;
-
-	<span class="comment">//////////////////////////////////////////////////////////////////////////</span>
-	<span class="comment">//									//</span>
-	<span class="comment">//////////////////////////////////////////////////////////////////////////</span></code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
 <p>Iframe Main handle the behavior of the iframe</p>
 </td>
 <td class="code">
@@ -147,24 +122,38 @@ code .this { color: #19469D; }</style>
 </td>
 <td class="code">
 <pre><code><span class="keyword">var</span> <span class="class">IframeMain</span>	= <span class="keyword">function</span>(){
+	<span class="this">this</span>.<span class="variable">connectedRsc</span>	= <span class="keyword">null</span>;
+	<span class="comment">// init this object</span>
+	<span class="this">this</span>.<span class="variable">log</span>		= <span class="class">IframeMain</span>.<span class="variable">log</span>;
+	<span class="comment">// create the parentWindow and wait for message</span>
 	<span class="this">this</span>.<span class="variable">parentWindowMessageCtor</span>()
 }
 <span class="class">IframeMain</span>.<span class="variable">prototype</span>.<span class="variable">destroy</span>	= <span class="keyword">function</span>(){
-}
+}</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Log function for the class</p>
+</td>
+<td class="code">
+<pre><code><span class="class">IframeMain</span>.<span class="variable">log</span>	= <span class="keyword">function</span>(){}
+<span class="comment">//IframeMain.log	= function(){ console.log.apply(console, arguments) }</span>
+
 
 <span class="comment">//////////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//										//</span>
 <span class="comment">//////////////////////////////////////////////////////////////////////////////////</span>
 
 <span class="class">IframeMain</span>.<span class="variable">prototype</span>.<span class="variable">channelCtor</span>	= <span class="keyword">function</span>(<span class="variable">token</span>, <span class="variable">resource</span>, <span class="variable">clientId</span>){
-	<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">create</span> <span class="variable">channel</span>&<span class="variable">quot</span>;, <span class="variable">token</span>)
 	<span class="keyword">var</span> <span class="variable">self</span>	= <span class="this">this</span>;
 	<span class="keyword">var</span> <span class="variable">channel</span>	= <span class="keyword">new</span> <span class="variable">goog</span>.<span class="variable">appengine</span>.<span class="class">Channel</span>(<span class="variable">token</span>);
 	<span class="keyword">var</span> <span class="variable">socket</span>	= <span class="variable">channel</span>.<span class="variable">open</span>();
+	<span class="this">this</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">create</span> <span class="variable">channel</span>&<span class="variable">quot</span>;, <span class="variable">token</span>)
 
 	<span class="variable">socket</span>.<span class="variable">onopen</span>	= <span class="keyword">function</span>(){
-		<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">channel</span> <span class="variable">connected</span> <span class="variable">resource</span>&<span class="variable">quot</span>;, <span class="variable">resource</span>)
-		<span class="variable">connectedRsc</span>	= <span class="variable">resource</span>;
+		<span class="variable">self</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">channel</span> <span class="variable">connected</span> <span class="variable">resource</span>&<span class="variable">quot</span>;, <span class="variable">resource</span>)
+		<span class="variable">self</span>.<span class="variable">connectedRsc</span>	= <span class="variable">resource</span>;
 		
 		<span class="comment">// send the clientId to the parent window</span>
 		<span class="keyword">var</span> <span class="variable">data</span>	= {
@@ -175,29 +164,40 @@ code .this { color: #19469D; }</style>
 		}
 		<span class="variable">self</span>.<span class="variable">parentWindowMessageSend</span>(<span class="variable">data</span>);
 	}
-	<span class="variable">socket</span>.<span class="variable">onclose</span>	= <span class="keyword">function</span>(){
-		<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">channel</span> <span class="variable">closed</span>&<span class="variable">quot</span>;)
-	}
-	<span class="variable">socket</span>.<span class="variable">onerror</span>	= <span class="keyword">function</span>(<span class="variable">error</span>){
-		<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">channel</span> <span class="variable">error</span>&<span class="variable">quot</span>;, <span class="variable">error</span>)
-	}
-	<span class="variable">socket</span>.<span class="variable">onmessage</span>= <span class="keyword">function</span>(<span class="variable">message</span>, <span class="variable">opt_param</span>){
-		<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">got</span> <span class="variable">message</span>&<span class="variable">quot</span>;, <span class="variable">message</span>, <span class="variable">opt_param</span>)
-		<span class="variable">self</span>.<span class="variable">parentWindowMessageSend</span>({
-			<span class="variable">type</span>	: &<span class="variable">quot</span>;<span class="variable">data</span>&<span class="variable">quot</span>;,
-			<span class="variable">data</span>	: <span class="variable">message</span>.<span class="variable">data</span>
-		});
-	}
+
+	<span class="variable">socket</span>.<span class="variable">onclose</span>	= <span class="this">this</span>.<span class="variable">channelOnClose</span>.<span class="variable">bind</span>(<span class="this">this</span>);
+	<span class="variable">socket</span>.<span class="variable">onerror</span>	= <span class="this">this</span>.<span class="variable">channelOnError</span>.<span class="variable">bind</span>(<span class="this">this</span>);
+	<span class="variable">socket</span>.<span class="variable">onmessage</span>= <span class="this">this</span>.<span class="variable">channelOnMessage</span>.<span class="variable">bind</span>(<span class="this">this</span>);
 }
 
-<span class="class">IframeMain</span>.<span class="variable">prototype</span>.<span class="variable">channelConnect</span>	= <span class="keyword">function</span>(<span class="variable">resource</span>){
+<span class="class">IframeMain</span>.<span class="variable">prototype</span>.<span class="variable">channelOnClose</span>	= <span class="keyword">function</span>(){
+	<span class="this">this</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">channel</span> <span class="variable">closed</span>&<span class="variable">quot</span>;)
+}
+<span class="class">IframeMain</span>.<span class="variable">prototype</span>.<span class="variable">channelOnError</span>	= <span class="keyword">function</span>(<span class="variable">error</span>){
+	<span class="this">this</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">channel</span> <span class="variable">error</span>&<span class="variable">quot</span>;, <span class="variable">error</span>)
+}
+<span class="class">IframeMain</span>.<span class="variable">prototype</span>.<span class="variable">channelOnMessage</span>	= <span class="keyword">function</span>(<span class="variable">message</span>, <span class="variable">opt_param</span>){
+	<span class="this">this</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">got</span> <span class="variable">message</span>&<span class="variable">quot</span>;, <span class="variable">message</span>, <span class="variable">opt_param</span>)
+	<span class="this">this</span>.<span class="variable">parentWindowMessageSend</span>({
+		<span class="variable">type</span>	: &<span class="variable">quot</span>;<span class="variable">data</span>&<span class="variable">quot</span>;,
+		<span class="variable">data</span>	: <span class="variable">message</span>.<span class="variable">data</span>
+	});	
+}</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Send a query to the server to create a channel and get its identifying token</p>
+</td>
+<td class="code">
+<pre><code><span class="class">IframeMain</span>.<span class="variable">prototype</span>.<span class="variable">channelConnect</span>	= <span class="keyword">function</span>(<span class="variable">resource</span>){
 	<span class="keyword">var</span> <span class="variable">self</span>	= <span class="this">this</span>;
 	<span class="keyword">var</span> <span class="variable">clientId</span>	= &<span class="variable">quot</span>;<span class="variable">ezChannel</span>&<span class="variable">quot</span>;+<span class="class">Math</span>.<span class="variable">floor</span>(<span class="class">Math</span>.<span class="variable">random</span>()*<span class="number integer">99999</span>);		
 	<span class="keyword">var</span> <span class="variable">callUrl</span>	= &<span class="variable">quot</span>;/<span class="variable">createChannel</span>&<span class="variable">quot</span>;
 				+ &<span class="variable">quot</span>;?<span class="variable">callback</span>=?&<span class="variable">quot</span>;
 				+ &<span class="variable">quot</span>;&<span class="variable">amp</span>;<span class="variable">resource</span>=&<span class="variable">quot</span>;	+ <span class="variable">encodeURIComponent</span>(<span class="variable">resource</span>)
 				+ &<span class="variable">quot</span>;&<span class="variable">amp</span>;<span class="variable">clientId</span>=&<span class="variable">quot</span>;	+ <span class="variable">encodeURIComponent</span>(<span class="variable">clientId</span>);
-	<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">callUrl</span>&<span class="variable">quot</span>;, <span class="variable">callUrl</span>)
+	<span class="this">this</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">callUrl</span>&<span class="variable">quot</span>;, <span class="variable">callUrl</span>)
 	<span class="variable">jQuery</span>.<span class="variable">getJSON</span>(<span class="variable">callUrl</span>, <span class="keyword">function</span>(<span class="variable">token</span>){
 		<span class="variable">self</span>.<span class="variable">channelCtor</span>(<span class="variable">token</span>, <span class="variable">resource</span>, <span class="variable">clientId</span>);
 	});
@@ -210,16 +210,15 @@ code .this { color: #19469D; }</style>
 </td>
 <td class="code">
 <pre><code><span class="class">IframeMain</span>.<span class="variable">prototype</span>.<span class="variable">channelSend</span>	= <span class="keyword">function</span>(<span class="variable">resource</span>, <span class="variable">message</span>){
+	<span class="keyword">var</span> <span class="variable">self</span>	= <span class="this">this</span>;
 	<span class="keyword">var</span> <span class="variable">callUrl</span>	= &<span class="variable">quot</span>;/<span class="variable">sendToResource</span>&<span class="variable">quot</span>;
 				+ &<span class="variable">quot</span>;?<span class="variable">resource</span>=&<span class="variable">quot</span>;	+ <span class="variable">encodeURIComponent</span>(<span class="variable">resource</span>)
 				+ &<span class="variable">quot</span>;&<span class="variable">amp</span>;<span class="variable">message</span>=&<span class="variable">quot</span>;	+ <span class="variable">encodeURIComponent</span>(<span class="variable">message</span>);
-	<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">sendToResource</span> <span class="variable">callurl</span>&<span class="variable">quot</span>;, <span class="variable">callUrl</span>)
+	<span class="this">this</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">sendToResource</span> <span class="variable">callurl</span>&<span class="variable">quot</span>;, <span class="variable">callUrl</span>)
 	<span class="variable">jQuery</span>.<span class="variable">post</span>(<span class="variable">callUrl</span>, <span class="keyword">function</span>(<span class="variable">result</span>){
-		<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">message</span> <span class="variable">sent</span>&<span class="variable">quot</span>;)
+		<span class="variable">self</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">message</span> <span class="variable">sent</span>&<span class="variable">quot</span>;)
 	})
 }
-
-
 
 
 <span class="comment">//////////////////////////////////////////////////////////////////////////////////</span>
@@ -232,7 +231,7 @@ code .this { color: #19469D; }</style>
 		<span class="comment">// ignore the message received due to ChannelAPI itself</span>
 		<span class="keyword">if</span>(<span class="variable">event</span>.<span class="variable">origin</span> == &<span class="variable">quot</span>;<span class="variable">http</span>:<span class="comment">//talkgadget.google.com&quot;)	return;</span>
 		<span class="comment">// log the event</span>
-		<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">recevied</span> <span class="variable">message</span> <span class="variable">from</span> <span class="variable">caller</span>&<span class="variable">quot</span>;, <span class="variable">event</span>)
+		<span class="variable">self</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">recevied</span> <span class="variable">message</span> <span class="variable">from</span> <span class="variable">caller</span>&<span class="variable">quot</span>;, <span class="variable">event</span>)
 		<span class="variable">self</span>.<span class="variable">parentWindowMessageRecv</span>(<span class="variable">event</span>);		
 	}, <span class="variable">false</span>);		
 }
@@ -246,7 +245,7 @@ code .this { color: #19469D; }</style>
 </td>
 <td class="code">
 <pre><code><span class="class">IframeMain</span>.<span class="variable">prototype</span>.<span class="variable">parentWindowMessageSend</span>	= <span class="keyword">function</span>(<span class="variable">data</span>){
-	<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">iframe</span> <span class="variable">notify</span>&<span class="variable">quot</span>;, <span class="variable">data</span>)
+	<span class="this">this</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">iframe</span> <span class="variable">notify</span>&<span class="variable">quot</span>;, <span class="variable">data</span>)
 	<span class="variable">window</span>.<span class="variable">parent</span>.<span class="variable">postMessage</span>(<span class="class">JSON</span>.<span class="variable">stringify</span>(<span class="variable">data</span>), &<span class="variable">quot</span>;*&<span class="variable">quot</span>;);
 }</code></pre>
 </td>
@@ -262,17 +261,22 @@ code .this { color: #19469D; }</style>
 	<span class="keyword">var</span> <span class="variable">eventType</span>	= <span class="variable">eventFull</span>.<span class="variable">type</span>;
 	<span class="keyword">var</span> <span class="variable">eventData</span>	= <span class="variable">eventFull</span>.<span class="variable">data</span>;
 
-	<span class="variable">console</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">eventType</span>&<span class="variable">quot</span>;, <span class="variable">eventType</span>, &<span class="variable">quot</span>;<span class="variable">eventData</span>&<span class="variable">quot</span>;, <span class="variable">eventData</span>)
+	<span class="this">this</span>.<span class="variable">log</span>(&<span class="variable">quot</span>;<span class="variable">eventType</span>&<span class="variable">quot</span>;, <span class="variable">eventType</span>, &<span class="variable">quot</span>;<span class="variable">eventData</span>&<span class="variable">quot</span>;, <span class="variable">eventData</span>)
 	<span class="keyword">if</span>( <span class="variable">eventType</span> == &<span class="variable">quot</span>;<span class="variable">connect</span>&<span class="variable">quot</span>; ){
 		<span class="this">this</span>.<span class="variable">channelConnect</span>(<span class="variable">eventData</span>.<span class="variable">resource</span>)
 	}<span class="keyword">else</span> <span class="keyword">if</span>( <span class="variable">eventType</span> == &<span class="variable">quot</span>;<span class="variable">data</span>&<span class="variable">quot</span>; ){
-		<span class="this">this</span>.<span class="variable">channelSend</span>(<span class="variable">connectedRsc</span>, <span class="variable">eventData</span>.<span class="variable">message</span>);
+		<span class="this">this</span>.<span class="variable">channelSend</span>(<span class="this">this</span>.<span class="variable">connectedRsc</span>, <span class="variable">eventData</span>.<span class="variable">message</span>);
 	}
 }
 
 
+
+<span class="variable">jQuery</span>(<span class="keyword">function</span>(){
+	<span class="comment">//IframeMain.log	= function(){ console.log.apply(console, arguments) }	</span>
 	<span class="keyword">var</span> <span class="variable">iframeMain</span>	= <span class="keyword">new</span> <span class="class">IframeMain</span>();
-});</code></pre>
+});
+
+</code></pre>
 </td>
 </tr>	</body>
 </html></tbody></table>
