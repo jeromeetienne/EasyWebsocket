@@ -2,6 +2,8 @@
  * like Websocket, but with no servers to setup
  *
  * * http://dev.w3.org/html5/websockets/ websocket specification
+ * * TODO replace this.resource by this.url everywhere. this resource things
+ *   is not suitable
 */
 
 /**
@@ -12,13 +14,15 @@
 */
 EasyWebSocket	= function(url, protocols)
 {
-	var self	= this;
+	var self		= this;
 	// standard: readonly attribute DOMString url;
-	this.url	= url;
+	this.url		= url;
+	// create a dummy bufferedAmount property. it is in WebSocket Standard
+	this.bufferedAmount	= 0;
+	// create the readyState property
+	this.readyState		= EasyWebSocket.CONNECTING;
+	
 	// extract resource from the url
-	// - the domain part is ignored
-	// - TODO i should take the whole url
-	//this.resource	= this.url.match(/.*:\/\/[^/]*\/(.+)/)[1];
 	this.resource	= this.url;
 
 	// define the class logging function
@@ -29,9 +33,10 @@ EasyWebSocket	= function(url, protocols)
 	
 	// TODO here there is an issue with domReady
 	// - document.readyState == "complete"
+	// - do i need it ? super unsure
 	this._iframeCtor();
 	
-		
+	// TODO put that in a loop
 	this.onopen		= function(){
 		self.log("default onopen")
 	}
@@ -50,11 +55,14 @@ EasyWebSocket	= function(url, protocols)
 	window.addEventListener("message", function(domEvent){
 		// if event is not from the iframe, return now
 		if( domEvent.origin != self.iframeOrigin )	return;
-		// notify the local handler		
+		// notify the local handler
 		self._onWindowMessage(domEvent)
 	}, false);
 }
 
+/**
+ * Handle message from the child <iframe>
+*/
 EasyWebSocket.prototype._onWindowMessage	= function(domEvent)
 {		
 	// parse the event from the iframe
@@ -65,6 +73,7 @@ EasyWebSocket.prototype._onWindowMessage	= function(domEvent)
 	this.log("recevied message from iframe", eventFull)
 	
 	if( eventType == "connected" ){
+		this.readyState	= EasyWebSocket.OPEN;
 		this.onopen();
 	}else if( eventType == "data" ){
 		this.onmessage({ data : eventData });
@@ -90,13 +99,19 @@ EasyWebSocket.prototype.send	= function(data)
 */
 EasyWebSocket.prototype.close	= function()
 {
+	this.readyState	= EasyWebSocket.CLOSING;
 	this._iframeDtor();
+	this.readyState	= EasyWebSocket.CLOSED;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+
+/**
+ * Build the iframe
+*/
 EasyWebSocket.prototype._iframeCtor		= function()
 {
 	var self	= this;
@@ -132,6 +147,9 @@ EasyWebSocket.prototype._iframeDtor		= function()
 	iframe.parent.removeChild(iframe);
 }
 
+/**
+ * @returns {Boolean} true if the iframe exists, false otherwise
+*/
 EasyWebSocket.prototype._iframeExist	= function()
 {
 	return this.iframeId;
@@ -145,12 +163,18 @@ EasyWebSocket.prototype._iframeSendRaw	= function(data)
 	iframeEl.postMessage(JSON.stringify(data), targetOrigin);
 }
 
+/**
+ * * TODO this should not be there ?
+ *   * why not put this url in the iframe url ?
+ *   * and iframe to parse its location.href on load ?
+ * 
+*/
 EasyWebSocket.prototype._iframeSendConnect	= function()
 {
 	var data	= {
 		type	: "connect",
 		data	: {
-			resource	: this.resource
+			wsUrl	: this.resource
 		}
 	}
 	this._iframeSendRaw(data);
@@ -169,20 +193,20 @@ EasyWebSocket.prototype._iframeSendData	= function(message)
 
 /**
  * Possible values for .readyState
+ *
+ * - thoses values are part of the standard
 */
-EasyWebSocket.STATE	= {}
-EasyWebSocket.STATE.CONNECTING	= 0;
-EasyWebSocket.STATE.OPEN		= 1;
-EasyWebSocket.STATE.CLOSING		= 2;
-EasyWebSocket.STATE.CLOSED		= 3;
-
+EasyWebSocket.CONNECTING	= 0;
+EasyWebSocket.OPEN		= 1;
+EasyWebSocket.CLOSING		= 2;
+EasyWebSocket.CLOSED		= 3;
 
 /**
- * Various constant
+ * Configuration
  * 
  * * Devel values
  *   * EasyWebSocket.iframeOrigin	= "http://localhost:8080";
- *   * EasyWebSocket.logFunction	= function(){ console.log.apply(console, arguments) }
+ *   * EasyWebSocket.logFunction	= console.log.bind(console);
 */
 EasyWebSocket.iframeOrigin	= "http://easywebsocket.appspot.com";
 EasyWebSocket.logFunction	= function(){}
