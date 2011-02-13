@@ -2,15 +2,20 @@ import logging
 import datetime
 
 from google.appengine.api import channel
+from google.appengine.api import taskqueue
+
 from google.appengine.ext import webapp
 from google.appengine.ext import db
 from google.appengine.ext.webapp.util import run_wsgi_app
 
+# constant to know when to refresh client liveness
+clientAliveRefresh  = 60*1000;
+clientAliveTimeout  = 3*60*1000;
 
 class Client(db.Model):
     """the data about the client"""
     clientId    = db.StringProperty()
-    resource    = db.StringProperty()
+    wsUrl       = db.StringProperty()
     timestamp   = db.DateTimeProperty()
 
 # jsonp call which return the token to create the channel in .js
@@ -18,46 +23,32 @@ class Client(db.Model):
 class createChannel(webapp.RequestHandler):
     def get(self):
         clientId    = self.request.get("clientId");
-        resource    = self.request.get("resource");
+        wsUrl       = self.request.get("wsUrl");
         callback    = self.request.get("callback");
         # create the record
         # TODO should i detect a collision on the clientid ?
-        client      = Client(clientId=clientId, resource=resource, timestamp=datetime.datetime.now())
+        client      = Client(clientId=clientId, wsUrl=wsUrl, timestamp=datetime.datetime.now())
         client.put()
         # create the channel
         token       = channel.create_channel(clientId);
+        # queue a /clientPurge task
+        taskqueue.add(url='/clientPurge');
         # build the jsonp answer
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write("%s(\"%s\");\n" % (callback,token))
+        self.response.out.write("%s({token:'%s', clientAliveRefresh: %d});\n" % (callback,token, clientAliveRefresh))
 
-# post method /send to send message to a given clientId
-class sendToClientId(webapp.RequestHandler):
+# post method /send to send message to all client of a given wsUrl
+class sendToWebsocketUrl(webapp.RequestHandler):
     def post(self):
-        clientId    = self.request.get("clientId");
+        wsUrl       = self.request.get("wsUrl");
         message     = self.request.get("message");
-        channel.send_message(clientId, message);
-
-# post method /send to send message to all client of a given resource
-class sendToResource(webapp.RequestHandler):
-    def post(self):
-        resource    = self.request.get("resource");
-        message     = self.request.get("message");
-        clients     = Client.all().filter('resource',resource).fetch(1000)
+        clients     = Client.all().filter('wsUrl',wsUrl).fetch(1000)
         for client in clients:
-            channel.send_message(client.clientId, message);
-
-# count the number of client on a given resource
-# - i dont think this one is used. for use this is out of the usual
-#   WebSocket API.
-class resourceCount(webapp.RequestHandler):
-    def post(self):
-        resource    = self.request.get("resource");
-        callback    = self.request.get("callback");
-        # do the count
-        count       = Client.all().filter('resource',resource).count()
-        # build the jsonp answer
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write("%s(\"%s\");\n" % (callback,count))
+            try:
+                channel.send_message(client.clientId, message);
+            except InvalidChannelClientIdError:
+                # if this client is declared invalid by channel API, delete it
+                client.delete
 
 # must be called periodically by the clientId
 class clientAlive(webapp.RequestHandler):
@@ -70,18 +61,17 @@ class clientAlive(webapp.RequestHandler):
 # must be called periodically - TODO maybe a task in AppEngine
 class clientPurge(webapp.RequestHandler):
     def post(self):
-        maxTime = datetime.datetime.now() - datetime.timedelta(hours=10)
+        maxTime = datetime.datetime.now() - datetime.timedelta(milliseconds=clientAliveTimeout)
         clients = Client.all().filter('timestamp <', maxTime).fetch(1000)
         for client in clients:
+            logging.debug("Deleting obsolete %s  %s" % (client.clientId, datetime.datetime.now() - client.timestamp))
             client.delete()
-
+            
 
 application = webapp.WSGIApplication(
     [
       ('/createChannel'     , createChannel)
-    , ('/sendToClientId'    , sendToClientId)
-    , ('/sendToResource'    , sendToResource)
-    , ('/resourceCount'     , resourceCount)
+    , ('/sendToWebsocketUrl', sendToWebsocketUrl)
     , ('/clientAlive'       , clientAlive)
     , ('/clientPurge'       , clientPurge)
     ],
