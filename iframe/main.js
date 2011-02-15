@@ -202,7 +202,7 @@ IframeMain.prototype.pingCallback	= function(){
 
 
 jQuery(function(){
-	IframeMain.log	= console.log.bind(console);
+	//IframeMain.log	= console.log.bind(console);
 	var iframeMain	= new IframeMain();
 });
 
