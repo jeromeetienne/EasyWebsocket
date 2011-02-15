@@ -58,7 +58,7 @@ var ChatAnywhere	= function(){
 	}
 	socket.onmessage= function(event){
 		var event	= JSON.parse(event.data);
-		console.log("event", event)
+		//console.log("event", event)
 		if( event.type == "message" ){
 			setMessage(event.data);			
 		}else if( event.type == "join" ){
@@ -67,7 +67,7 @@ var ChatAnywhere	= function(){
 		}else if( event.type == "rename" ){
 			setRename(event.data);
 		}else{
-			console.log("unhandled event in socket message")
+			//console.log("unhandled event in socket message")
 		}
 	}
 	socket.onclose	= function(){
@@ -82,7 +82,7 @@ var ChatAnywhere	= function(){
 		return false;
 	})
 	var socketSend	= function(data){
-		console.log("socketSend", data)
+		//console.log("socketSend", data)
 		socket.send(JSON.stringify(data));
 	}
 	var sendMessage	= function(username, message){
