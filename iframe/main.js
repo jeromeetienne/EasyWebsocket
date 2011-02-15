@@ -106,8 +106,6 @@ IframeMain.prototype.channelConnect	= function(){
 	jQuery.getJSON(callUrl, function(result){
 		// update the ping period with the number recomended by the server
 		self.pingPeriod	= result.clientAliveRefresh;
-		console.log("clientAliveRefresh", result.clientAliveRefresh)
-		console.log("token", result.token)
 		// start creating the ctor
 		self.channelCtor(result.token);
 	});
