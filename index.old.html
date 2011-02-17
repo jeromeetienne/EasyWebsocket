@@ -6,14 +6,14 @@
 	
 	<style type="text/css"> 
 	body {
-		margin-top	: 1.0em; 
+		margin-top: 1.0em; 
 		background-color: #22252A;
-		font-family	: "Helvetica,Arial,FreeSans";
-		color		: #fff;
+		font-family: "Helvetica,Arial,FreeSans";
+		color: #EEE;
 	}
 	#container {
-		margin	: 0 auto;
-		width	: 960px;
+		margin: 0 auto;
+		width: 700px;
 	}
 	h1 {
 		font-size	: 3.8em;
@@ -32,33 +32,20 @@
 	h3 {
 		text-align: center; color: #b523ab;
 	}
-	a {
-		color: #cd5;
-	}
+	a { color: #cd5; }
 	.description {
-		font-size	: 1.2em;
-		margin-bottom	: 20px;
-		margin-top	: 10px;
-		font-style	: italic;
-		text-align	: center;
+		font-size: 1.2em;
+		margin-bottom: 20px;
+		margin-top: 10px;
+		font-style: italic;
+		text-align: center;
 	}
 	pre {
-		font-size	: 130%;
-		background	: #020202;
-		color		: #ccc;
-		padding		: 15px;
-		border-radius	: 20px;
-		border		: solid;
-		border-width	: 2px;
-		border-color	: #888;
-		text-shadow	: 0px 1px 0px #333;
+		background: #000;
+		color: #EEE;
+		padding: 15px;
 	}
-	pre span.change {
-		color		: #B43;
-	}
-	hr {	border		: 0;
-		width		: 80%;
-		border-bottom	: 1px solid #aaa;
+	hr { border: 0; width: 80%; border-bottom: 1px solid #aaa;
 		margin-bottom	: 3em;
 	}
 	.tutorial {
@@ -68,12 +55,6 @@
 		font-size	: 1.2em;
 	}
 	.footer { text-align:center; padding-top:30px; font-style: italic; }
-	p {
-		font-size	: 1.2em;
-		letter-spacing	: 0.05em;
-		word-spacing	: 0.1em;
-/*		text-shadow	: 0px 1px 0px #FFF;
-*/	}
 	</style> 
 </head>  
 <body>
@@ -82,50 +63,53 @@
 			<a href="http://easywebsocket.org">Easy WebSocket</a>
 		</h1> 
 		<div class="description"> 
-			a WebSocket client to broadcast messages to webpages
+			like WebSocket but no server setup and available in any browser
 		</div>
 		<hr>
 		<p>
-			<b>EasyWebSocket</b> is simple websockets broadcasting. It is perfect
-			for a quick prototype.. getting it going quick.
-			90% this is all you need if you're doing websocket something.
-		</p>	
-		<p>
-			You want to use websockets ? You want to broadcast messages to all connected clients ?
-			You don't want to worry about browser compatiblity ?
-			You don't want to set up a server ? Here's all the code you need.
+		<b>EasyWebSocket</b> aims to make realtimes webapps in every browser without the trouble
+		to setup servers.
 		</p>
+
+		<h2>How to Use It</h2>
+			<p>
+			Include the following in your webpage and it just works.
+			</p>
 			<pre>
-	<span class="change">&lt;script src="http://easywebsocket.org/easyWebSocket.min.js"&gt;&lt;/script&gt;</span>
-	&lt;script&gt;
-	    var socket = new <span class="change">Easy</span>WebSocket("ws://example.com/resource");
-	    socket.onopen = function(){
-		socket.send("hello world!")
-	    }
-	    socket.onmessage = function(event){
-		alert("received "+ event.data)
-	    }
-	&lt;/script&gt;</pre>
+    &lt;script src="http://easywebsocket.org/easyWebSocket.min.js"&gt;&lt;/script&gt;	
+    &lt;script&gt;
+        var socket = new EasyWebSocket("ws://example.com/resource");
+        socket.onopen	= function(){
+            socket.send("hello world!")
+        }
+        socket.onmessage= function(event){
+            alert("received "+ event.data)
+        }
+    &lt;/script&gt;</pre>
 			<p class="tutorial">				
 				<b>Step 1:</b> You connect the socket to a given url
 			</p>
 			<p class="tutorial">
 				<b>Step 2:</b> What you send() thru this socket is sent to all sockets connected the same url
 			</p>
-			<p>
-			Just include this code in your webpage and it works. See it <a href="example/example.html">live</a>.
-			The API is copied on the <a href="http://dev.w3.org/html5/websockets/">WebScocket standard API</a>, thus
-			compatible and easy to learn.
-			For more information, look at the <a href="https://docs.google.com/present/view?id=dhng4bgf_47gb6txzds">slides</a> of
-			a talk i did about it.
-
-			Here is a little <a href="contrib/chat">chat demo</a> on top of it or
-			another which <a href="contrib/monitor/">monitor latency in real time</a>.
+			<p>See this code <a href="example/example.html">live</a>.
+			No server setup, no cross-origin issue to care about... <b>It is that easy!</b>
 			</p>
+		<h2>Demo</h2>
+			<p>
+			Seeing it work is always nice. Here is a little
+			<a href="contrib/chat">chat application</a>
+			on top of EasyWebSocket.
+			It is possible to <a href="contrib/monitor/">monitor EasyWebSocket time efficiency</a>.
+			</p>
+		<h2>Code</h2>
 			<p>
 			EasyWebSocket is written by <a href="http://jetienne.com">Jerome Etienne</a>.
 			The code is available on github at <a href="http://github.com/jeromeetienne/EasyWebsocket">EasyWebSocket</a>
 			under <a href="https://github.com/jeromeetienne/EasyWebsocket/raw/master/MIT-LICENSE.txt">MIT license</a>.
+			The API is copied on the <a href="http://dev.w3.org/html5/websockets/">WebScocket standard API</a>, thus
+			compatible and easy to learn.
+			I did a <a href="https://docs.google.com/present/view?id=dhng4bgf_47gb6txzds">presentation</a> for it.
 			</p>
 	</div>
 	<!-- google analytic support -->
