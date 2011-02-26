@@ -46,7 +46,7 @@ class sendToWebsocketUrl(webapp.RequestHandler):
         for client in clients:
             try:
                 channel.send_message(client.clientId, message);
-            except InvalidChannelClientIdError:
+            except channel.InvalidChannelClientIdError:
                 # if this client is declared invalid by channel API, delete it
                 client.delete
 
