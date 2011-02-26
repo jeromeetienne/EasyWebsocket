@@ -29,7 +29,7 @@ EasyWebSocket	= function(url, protocols)
 	this.log	= EasyWebSocket.logFunction;
 
 	this.iframeOrigin	= EasyWebSocket.iframeOrigin;
-	this.iframeUrl		= this.iframeOrigin + "/iframe/index.html";
+	this.iframeUrl		= this.iframeOrigin + "/gapp/iframe/index.html";
 	
 	// TODO here there is an issue with domReady
 	// - document.readyState == "complete"
