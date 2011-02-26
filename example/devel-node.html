@@ -1,0 +1,34 @@
+<html>
+<head>
+	<script src="../node/easyWebSocket-node.js"></script>
+	<!-- warning this port MUST be the same as nodester -->
+	<script src="http://localhost:8667/socket.io/socket.io.js"></script>	
+</head>
+<body>
+	<script>
+		var basicTest	= function(){
+			// setup EasyWebSocket for local server + loggin
+			EasyWebSocket.iframeOrigin	= "http://localhost:8080";
+			EasyWebSocket.logFunction	= function(){ console.log.apply(console, arguments) }
+
+
+			var url		= "ws://example.com/superwa/wa"
+			var socket 	= new EasyWebSocket(url);
+			var bootTime	= new Date();
+			var sendTime	= null;
+			socket.onopen	= function(){
+				console.log("connected in", new Date() - bootTime,"ms");
+				sendTime	= new Date();
+				socket.send("hello world")
+			}
+			socket.onmessage= function(event){
+				console.log("socket onmessage event", event.data, new Date() - sendTime, "ms")
+			}
+			socket.onclose	= function(){
+				console.log("socket onclose")			
+			}
+		}
+		basicTest();
+	</script>
+</body>
+</html>

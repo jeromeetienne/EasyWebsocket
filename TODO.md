@@ -1,6 +1,7 @@
 # about node refactoring
 * split in 2 parts. -node and -gapp
 * clearly present that on the webpage
+* for demo apps, allow a 'backend=gapp' or 'backend=node'
 
 ## how about folder hierarchie
 * /node and /gapp
