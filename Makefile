@@ -13,7 +13,6 @@ help:
 server:
 	$(GAE_ROOT)/dev_appserver.py .
 
-
 docs:
 	dox	--title "html5-RockPaperScissors"		\
 		--desc "RockPaperScissors on WebSocket"		\

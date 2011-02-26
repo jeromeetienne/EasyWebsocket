@@ -1,5 +1,25 @@
-### TODO
+# about node refactoring
+* split in 2 parts. -node and -gapp
+* clearly present that on the webpage
 
+## how about folder hierarchie
+* /node and /gapp
+* about the exposed .js
+  * /easyWebSocket-node.min.js 
+  * /easyWebSocket-gapp.min.js 
+  * /easyWebSocket.min.js
+    * this one is the default (the node one if it is stable enougth)
+* generic static files are hosted on github at easywebsocket.org
+  * static file are hosted on nodester/gapp IIF required
+
+## nodester
+* currently this is the hosting for the node version
+  * make command to handle the hosting
+  * not sure what is it
+  * create/status/start/stop/delete apps ? other ?
+  * all that packed in a makefile to capture knowledge
+
+### TODO
 
 * to make a demo on the home page which display the mouse of others
   * funnier than a chat

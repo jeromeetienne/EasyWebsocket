@@ -1,14 +1,14 @@
+# Google AppEngine configuration file
+# for easywebsocket-gapp.js only
+
 application: easywebsocket
 version: 1
 runtime: python
 api_version: 1
 
 handlers:
-- url: /iframe
-  static_dir: iframe
-
-- url: /examples
-  static_dir: examples
+- url: /gapp/iframe
+  static_dir: gapp/iframe
 
 - url: /.*
-  script: AppEngine/easyWebSocket.py
+  script: gapp/AppEngine/easyWebSocket.py
