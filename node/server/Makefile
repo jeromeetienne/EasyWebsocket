@@ -1,6 +1,9 @@
+# written but not tested
+
 NSTER_USERNAME="jetienne"
 NSTER_PASSWORD="123"
 NSTER_APPNAME="easywebsocket"
+# TODO this one is wrong
 STARTJS_PATH="server.js"
 
 app_create:
