@@ -1,9 +1,11 @@
 # about node refactoring
+
 * split in 2 parts. -node and -gapp
 * clearly present that on the webpage
 * for demo apps, allow a 'backend=gapp' or 'backend=node'
 
 ## how about folder hierarchie
+
 * /node and /gapp
 * about the exposed .js
   * /easyWebSocket-node.min.js 
@@ -14,11 +16,18 @@
   * static file are hosted on nodester/gapp IIF required
 
 ## nodester
+
 * currently this is the hosting for the node version
   * make command to handle the hosting
   * not sure what is it
   * create/status/start/stop/delete apps ? other ?
   * all that packed in a makefile to capture knowledge
+* deployment ala github page
+  * look at how they advice to do
+  * maybe copy for github page
+  * the problem is the same
+  * their way seems way better
+  * http://reinh.com/blog/2008/04/18/git-push-just-the-tip.html
 
 ### TODO
 
