@@ -8,6 +8,9 @@ var httpSrv	= require('http').createServer(function(request, response) {})
 // server start listening
 httpSrv.listen(listenPort);
 
+console.log("listen on port "+listenPort)
+
+
 var ewsClients	= {}
 var wsUrls	= {}
 

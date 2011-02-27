@@ -1,3 +1,7 @@
+# TODO
+
+* make node/server in node/server_nodester
+
 # about node refactoring
 
 * split in 2 parts. -node and -gapp

@@ -44,8 +44,9 @@ EasyWebSocket	= function(url, protocols)
 
 EasyWebSocket.prototype._sioCtor	= function()
 {
+	var listenHost	= "localhost";
 	var listenPort	= 8667;	// TODO change this to be tunable and work on nodester
-	this._sockio	= new io.Socket(null, {port: listenPort, rememberTransport: false});
+	this._sockio	= new io.Socket(listenHost, {port: listenPort, rememberTransport: false});
 	this._sockio.connect();
 	this._sockio.on('connect', function(){
 		console.log("socket connected", this._sockio, this._clientId)

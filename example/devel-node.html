@@ -1,8 +1,9 @@
 <html>
 <head>
+	<script src="../node/server/node_modules/socket.io/support/socket.io-client/socket.io.js"></script>
 	<script src="../node/easyWebSocket-node.js"></script>
-	<!-- warning this port MUST be the same as nodester -->
-	<script src="http://localhost:8667/socket.io/socket.io.js"></script>	
+<!--	<script src="../easyWebSocket-node.min.js"></script>
+-->	
 </head>
 <body>
 	<script>
@@ -10,7 +11,6 @@
 			// setup EasyWebSocket for local server + loggin
 			EasyWebSocket.iframeOrigin	= "http://localhost:8080";
 			EasyWebSocket.logFunction	= function(){ console.log.apply(console, arguments) }
-
 
 			var url		= "ws://example.com/superwa/wa"
 			var socket 	= new EasyWebSocket(url);
