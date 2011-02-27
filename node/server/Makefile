@@ -4,22 +4,33 @@ NSTER_USERNAME="jetienne"
 NSTER_PASSWORD="123"
 NSTER_APPNAME="easywebsocket"
 # TODO this one is wrong
-STARTJS_PATH="server.js"
+STARTJS_PATH="node/server/server.js"
 
 app_create:
-	curl -X POST -u "$NSTER_USERNAME:$NSTER_PASSWORD" -d "appname=$NSTER_APPNAME&start=$STARTJS_PATH" http://api.nodester.com/app
+	curl -X POST -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" -d "appname=$(NSTER_APPNAME)&start=$(STARTJS_PATH)" http://api.nodester.com/app | jsonpretty
+
+# need to get the proper git remote
+# - get it in the app_info json output
+# - 
+git_setup:
+	git remote rm nodester
+	git remote add nodester ec2-user@nodester.com:/home/ec2-user/hosted_apps/jetienne/535-eff3208a1e9009ba30bddc796915d488.git
 
 app_delete:
-	curl -X DELETE -u "$NSTER_USERNAME:$NSTER_PASSWORD" -d "appname=$NSTER_APPNAME" http://api.nodester.com/app
-
+	curl -X DELETE -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" -d "appname=$(NSTER_APPNAME)" http://api.nodester.com/app | jsonpretty
 
 app_start:
-	curl -X PUT -u "$NSTER_USERNAME:$NSTER_PASSWORD" -d "appname=$NSTER_APPNAME&running=true" http://api.nodester.com/app
+	curl -X PUT -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" -d "appname=$(NSTER_APPNAME)&running=true" http://api.nodester.com/app | jsonpretty
+
+app_stop:
+	curl -X PUT -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" -d "appname=$(NSTER_APPNAME)&running=false" http://api.nodester.com/app | jsonpretty
 
 app_info:
-	curl -u "$NSTER_USERNAME:$NSTER_PASSWORD" http://api.nodester.com/app/$NSTER_APPNAME | jsonpretty
+	curl -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" http://api.nodester.com/app/$(NSTER_APPNAME) | jsonpretty
 
+app_logs:
+	curl -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" http://api.nodester.com/applogs/$(NSTER_APPNAME) | jsonpretty
 
 apps_info:
-	curl -u "$NSTER_USERNAME:$NSTER_PASSWORD" http://api.nodester.com/apps | jsonpretty
+	curl -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" http://api.nodester.com/apps | jsonpretty
 

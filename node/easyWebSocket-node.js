@@ -44,8 +44,9 @@ EasyWebSocket	= function(url, protocols)
 
 EasyWebSocket.prototype._sioCtor	= function()
 {
-	var listenHost	= "localhost";
-	var listenPort	= 8667;	// TODO change this to be tunable and work on nodester
+	var serverUrl	= this.parseUri(EasyWebSocket.serverUrl);
+	var listenHost	= serverUrl.host;
+	var listenPort	= parseInt(serverUrl.port);
 	this._sockio	= new io.Socket(listenHost, {port: listenPort, rememberTransport: false});
 	this._sockio.connect();
 	this._sockio.on('connect', function(){
@@ -123,8 +124,56 @@ EasyWebSocket.CLOSED		= 3;
  *   * EasyWebSocket.iframeOrigin	= "http://localhost:8080";
  *   * EasyWebSocket.logFunction	= console.log.bind(console);
 */
-EasyWebSocket.iframeOrigin	= "http://easywebsocket.appspot.com";
+EasyWebSocket.serverUrl		= "http://88.191.76.230:8667"; 	// TODO change this to be tunable and work on nodester
 EasyWebSocket.logFunction	= function(){}
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// parseUri 1.2.2
+// (c) Steven Levithan <stevenlevithan.com>
+// MIT License
+
+EasyWebSocket.prototype.parseUri	= function parseUri (str) {
+	var	o   = parseUri.options,
+		m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+		uri = {},
+		i   = 14;
+
+	while (i--) uri[o.key[i]] = m[i] || "";
+
+	uri[o.q.name] = {};
+	uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+		if ($1) uri[o.q.name][$1] = $2;
+	});
+
+	return uri;
+};
+
+EasyWebSocket.prototype.parseUri.options = {
+	strictMode: false,
+	key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
+	q:   {
+		name:   "queryKey",
+		parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+	},
+	parser: {
+		strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+		loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+	}
+};
+
+
 
 
 

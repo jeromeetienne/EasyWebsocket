@@ -28,7 +28,7 @@ minify:
 			--js node/easyWebSocket-node.js 						\
 			--js_output_file easyWebSocket-node.min.js
 	closurec --js gapp/easyWebSocket-gapp.js --js_output_file easyWebSocket-gapp.min.js
-	cp easyWebSocket-gapp.min.js easyWebSocket.min.js
+	cp easyWebSocket-node.min.js easyWebSocket.min.js
 
 deploy	: minify deployGhPage deployAppEngine 
 
@@ -36,8 +36,8 @@ deployAppEngine:
 	$(GAE_ROOT)/appcfg.py update .
 
 deployGhPage:
-	rm -rf /tmp/EasyWebsocketGhPages	
-	(cd /tmp && git clone . EasyWebsocketGhPages)
+	rm -rf /tmp/EasyWebsocketGhPages
+	(cd /tmp && git clone ~/webwork/EasyWebsocket EasyWebsocketGhPages)
 	(cd /tmp/EasyWebsocketGhPages && git checkout gh-pages)
 	cp -a *.html *.js CNAME ./gapp/iframe ./example ./contrib /tmp/EasyWebsocketGhPages
 	(cd /tmp/EasyWebsocketGhPages && git add . && git commit -a -m "Another deployement" && git push origin gh-pages)
