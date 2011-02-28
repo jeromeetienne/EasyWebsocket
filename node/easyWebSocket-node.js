@@ -28,11 +28,10 @@ EasyWebSocket	= function(url, protocols)
 	this.log		= EasyWebSocket.logFunction;
 	
 	// init default binding
-	["onopen", "onmessage", "onerror", "onclode"].forEach(function(method){
-		self[method]	= function(){
-			self.log("default "+method+" method")
-		}
-	})
+	this["onopen"]		= function(){ self.log("default onopen method");	}
+	this["onmessage"]	= function(){ self.log("default onmessage method");	}
+	this["onerror"]		= function(){ self.log("default onerror method");	}
+	this["onclose"]		= function(){ self.log("default onclose method");	}
 	// create socket.io client	
 	this._sioCtor();
 }
