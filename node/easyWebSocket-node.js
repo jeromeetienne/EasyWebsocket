@@ -6,6 +6,7 @@
  *   is not suitable
 */
 
+
 /**
  * Constructor
  *
@@ -43,38 +44,39 @@ EasyWebSocket	= function(url, protocols)
 
 EasyWebSocket.prototype._sioCtor	= function()
 {
+	var self	= this;
 	var serverUrl	= this.parseUri(EasyWebSocket.serverUrl);
 	var listenHost	= serverUrl.host;
 	var listenPort	= parseInt(serverUrl.port);
 	this._sockio	= new io.Socket(listenHost, {port: listenPort, rememberTransport: false});
 	this._sockio.connect();
 	this._sockio.on('connect', function(){
-		console.log("socket connected", this._sockio, this._clientId)
+		console.log("socket connected", self._sockio, self._clientId)
 		// send the connect message
-		this._sockio.send({
+		self._sockio.send({
 			type	: "connect",
 			data	: {
-				wsUrl	: this.url,
-				clientId: this._clientId
+				wsUrl	: self.url,
+				clientId: self._clientId
 			}
 		});
 		// update readyState
-		this.readyState		= EasyWebSocket.CONNECTED;
+		self.readyState		= EasyWebSocket.CONNECTED;
 		// notify the caller
-		this.onopen();		
-	}.bind(this)) 
+		self.onopen();		
+	}) 
 	this._sockio.on('connect_failed', function(){
-		this.onerror()	// TODO is there an event attached to that
-	}.bind(this)) 
+		self.onerror()	// TODO is there an event attached to that
+	}) 
 	this._sockio.on('message', function(message){
 		console.log("received message", message);
 		// notify the received message
-		this.onmessage({data: message})
-	}.bind(this)) 
+		self.onmessage({data: message})
+	}) 
 	this._sockio.on('disconnect', function(){
 		console.log("socket disconnected")
-		this.onclose()	// TODO is there an event attached to that
-	}.bind(this))
+		self.onclose()	// TODO is there an event attached to that
+	})
 }
 
 //////////////////////////////////////////////////////////////////////////////////
