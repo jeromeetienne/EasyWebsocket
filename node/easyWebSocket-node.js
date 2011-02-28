@@ -74,7 +74,7 @@ EasyWebSocket.prototype._sioCtor	= function()
 		self.onmessage({data: message})
 	}) 
 	this._sockio.on('disconnect', function(){
-		console.log("socket disconnected")
+		self.log("socket disconnected")
 		self.onclose()	// TODO is there an event attached to that
 	})
 }
