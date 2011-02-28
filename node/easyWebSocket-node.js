@@ -69,7 +69,7 @@ EasyWebSocket.prototype._sioCtor	= function()
 		self.onerror()	// TODO is there an event attached to that
 	}) 
 	this._sockio.on('message', function(message){
-		console.log("received message", message);
+		self.log("received message", message);
 		// notify the received message
 		self.onmessage({data: message})
 	}) 
