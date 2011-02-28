@@ -51,7 +51,7 @@ EasyWebSocket.prototype._sioCtor	= function()
 	this._sockio	= new io.Socket(listenHost, {port: listenPort, rememberTransport: false});
 	this._sockio.connect();
 	this._sockio.on('connect', function(){
-		console.log("socket connected", self._sockio, self._clientId)
+		self.log("socket connected", self._sockio, self._clientId)
 		// send the connect message
 		self._sockio.send({
 			type	: "connect",
