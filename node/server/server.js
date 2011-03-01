@@ -6,7 +6,12 @@ var listenPort	= 8667;
 // start http server
 var httpSrv	= require('http').createServer(function(request, response) {})
 // server start listening
-httpSrv.listen(listenPort);
+if( module === require.main){
+	httpSrv.listen(listenPort);
+}else{
+	// this one is needed for cluster.js
+	module.exports	= httpSrv;	
+}
 
 console.log("listen on port "+listenPort)
 

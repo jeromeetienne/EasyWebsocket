@@ -6,7 +6,7 @@
 	<script>
 		var basicTest	= function(){
 			// setup EasyWebSocket for local server + loggin
-			EasyWebSocket.iframeOrigin	= "http://localhost:8080";
+			EasyWebSocket.serverUrl		= "http://localhost:8080";
 			EasyWebSocket.logFunction	= function(){ console.log.apply(console, arguments) }
 
 
@@ -21,6 +21,7 @@
 			}
 			socket.onmessage= function(event){
 				console.log("socket onmessage event", event.data, new Date() - sendTime, "ms")
+				alert("OK")				
 			}
 			socket.onclose	= function(){
 				console.log("socket onclose")			

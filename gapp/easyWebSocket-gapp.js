@@ -28,8 +28,8 @@ EasyWebSocket	= function(url, protocols)
 	// define the class logging function
 	this.log	= EasyWebSocket.logFunction;
 
-	this.iframeOrigin	= EasyWebSocket.iframeOrigin;
-	this.iframeUrl		= this.iframeOrigin + "/gapp/iframe/index.html";
+	this.serverUrl	= EasyWebSocket.serverUrl;
+	this.iframeUrl	= this.serverUrl + "/gapp/iframe/index.html";
 	
 	// TODO here there is an issue with domReady
 	// - document.readyState == "complete"
@@ -54,7 +54,7 @@ EasyWebSocket	= function(url, protocols)
 	// - TODO do i need to chain those handler ?
 	window.addEventListener("message", function(domEvent){
 		// if event is not from the iframe, return now
-		if( domEvent.origin != self.iframeOrigin )	return;
+		if( domEvent.origin != self.serverUrl )	return;
 		// notify the local handler
 		self._onWindowMessage(domEvent)
 	}, false);
@@ -205,10 +205,10 @@ EasyWebSocket.CLOSED		= 3;
  * Configuration
  * 
  * * Devel values
- *   * EasyWebSocket.iframeOrigin	= "http://localhost:8080";
+ *   * EasyWebSocket.serverUrl	= "http://localhost:8080";
  *   * EasyWebSocket.logFunction	= console.log.bind(console);
 */
-EasyWebSocket.iframeOrigin	= "http://easywebsocket.appspot.com";
+EasyWebSocket.serverUrl	= "http://easywebsocket.appspot.com";
 EasyWebSocket.logFunction	= function(){}
 
 

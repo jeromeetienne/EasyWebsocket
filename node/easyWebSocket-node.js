@@ -145,8 +145,10 @@ EasyWebSocket.logFunction	= function(){}
 // (c) Steven Levithan <stevenlevithan.com>
 // MIT License
 
+
 EasyWebSocket.prototype.parseUri	= function parseUri (str) {
-	var	o   = parseUri.options,
+	var	o   = this.parseUri.options,
+	// TODO apparently this o.parser is causing trouble in IE8
 		m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
 		uri = {},
 		i   = 14;
@@ -173,8 +175,6 @@ EasyWebSocket.prototype.parseUri.options = {
 		loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
 	}
 };
-
-
 
 
 
