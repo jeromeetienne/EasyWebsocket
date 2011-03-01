@@ -6,7 +6,6 @@
 var cluster = require('cluster');
 
 cluster('./server.js')
-	.set('workers', 1)	// only 1 workers
 	.use(cluster.logger('logs'))
 	.use(cluster.stats())
 	.use(cluster.pidfiles('pids'))
