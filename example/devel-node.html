@@ -1,5 +1,7 @@
 <html>
 <head>
+	<!-- json2 is included because some browsers doesnt have it (e.g. ie8)	-->
+	<script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>		
 	<script src="../node/server/node_modules/socket.io/support/socket.io-client/socket.io.js"></script>
 	<script src="../node/easyWebSocket-node.js"></script>
 <!--	<script src="../easyWebSocket-node.min.js"></script>
@@ -9,8 +11,8 @@
 	<script>
 		var basicTest	= function(){
 			// setup EasyWebSocket for local server + loggin
-			EasyWebSocket.serverUrl		= "http://127.0.0.1:8667";
-			EasyWebSocket.logFunction	= function(){ console.log.apply(console, arguments) }
+			EasyWebSocket.serverUrl		= "http://192.168.0.10:8667";
+			//EasyWebSocket.logFunction	= function(){ console.log.apply(console, arguments) }
 
 			var url		= "ws://example.com/superwa/wa"
 			var socket 	= new EasyWebSocket(url);
@@ -23,6 +25,7 @@
 			}
 			socket.onmessage= function(event){
 				console.log("socket onmessage event", event.data, new Date() - sendTime, "ms")
+				alert("OK")
 			}
 			socket.onclose	= function(){
 				console.log("socket onclose")			
