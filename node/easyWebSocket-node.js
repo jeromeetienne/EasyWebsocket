@@ -6,7 +6,6 @@
  *   is not suitable
 */
 
-
 /**
  * Constructor
  *
@@ -27,7 +26,7 @@ EasyWebSocket	= function(url, protocols)
 
 	// define the class logging function
 	this.log		= EasyWebSocket.logFunction;
-	
+
 	// init default binding
 	this["onopen"]		= function(){ self.log("default onopen method");	}
 	this["onmessage"]	= function(){ self.log("default onmessage method");	}
@@ -48,7 +47,18 @@ EasyWebSocket.prototype._sioCtor	= function()
 	var serverUrl	= this.parseUri(EasyWebSocket.serverUrl);
 	var listenHost	= serverUrl.host;
 	var listenPort	= parseInt(serverUrl.port);
-	this._sockio	= new io.Socket(listenHost, {port: listenPort, rememberTransport: false});
+
+	// configure the swf for the flash websocket
+	// TODO FIXIT: got issue likely due to flash 'security'
+	WEB_SOCKET_SWF_LOCATION	= EasyWebSocket.serverUrl+'/node_modules/socket.io/support/socket.io-client/lib/vendor/web-socket-js/WebSocketMainInsecure.swf';
+	WEB_SOCKET_SWF_LOCATION	= 'http://192.168.0.10/~jerome/webwork/EasyWebsocket/node/server/node_modules/socket.io/support/socket.io-client/lib/vendor/web-socket-js/WebSocketMain.swf';
+console.log("WEB_SOCKET_SWF_LOCATION", WEB_SOCKET_SWF_LOCATION)
+
+	this._sockio	= new io.Socket(listenHost, {
+		port			: listenPort,
+		rememberTransport	: false,
+		transports		: ['websocket'/*, 'flashsocket'*/, 'htmlfile', 'xhr-multipart', 'xhr-polling']
+	});
 	this._sockio.connect();
 	this._sockio.on('connect', function(){
 		self.log("socket connected", self._sockio, self._clientId)
