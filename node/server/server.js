@@ -3,16 +3,8 @@
 // MUST matches nodester one
 var listenPort	= 8667;
 
-// init the node-static
-var nodestatic	= require('node-static');
-var staticSrv	= new nodestatic.Server('.');
 // start http server
 var httpSrv	= require('http').createServer(function(request, response){
-	//console.dir(request.url)
-	request.addListener('end', function () {
-		// serve the static files
-		staticSrv.serve(request, response);
-        });
 });
 // server start listening
 if( module === require.main){
