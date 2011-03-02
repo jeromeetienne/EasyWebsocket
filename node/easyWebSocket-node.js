@@ -49,11 +49,10 @@ EasyWebSocket.prototype._sioCtor	= function()
 	var listenPort	= parseInt(serverUrl.port);
 
 	// configure the swf for the flash websocket
-	// TODO FIXIT: got issue likely due to flash 'security'
-	WEB_SOCKET_SWF_LOCATION	= EasyWebSocket.serverUrl+'/node_modules/socket.io/support/socket.io-client/lib/vendor/web-socket-js/WebSocketMainInsecure.swf';
-	WEB_SOCKET_SWF_LOCATION	= 'http://192.168.0.10/~jerome/webwork/EasyWebsocket/node/server/node_modules/socket.io/support/socket.io-client/lib/vendor/web-socket-js/WebSocketMain.swf';
-console.log("WEB_SOCKET_SWF_LOCATION", WEB_SOCKET_SWF_LOCATION)
+	// - NOTE: not sure about this. i dont understand flash 'security'
+	WEB_SOCKET_SWF_LOCATION	= 'http://easywebsocket.org/node/server/node_modules/socket.io/support/socket.io-client/lib/vendor/web-socket-js/WebSocketMain.swf';
 
+	// create and config the socket
 	this._sockio	= new io.Socket(listenHost, {
 		port			: listenPort,
 		rememberTransport	: false,
