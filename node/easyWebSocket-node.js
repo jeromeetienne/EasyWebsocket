@@ -54,9 +54,9 @@ EasyWebSocket.prototype._sioCtor	= function()
 
 	// create and config the socket
 	this._sockio	= new io.Socket(listenHost, {
-		port			: listenPort,
-		rememberTransport	: false,
-		transports		: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling']
+		port			: listenPort
+		//rememberTransport	: false,
+		//transports		: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling']
 	});
 	this._sockio.connect();
 	this._sockio.on('connect', function(){
