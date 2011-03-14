@@ -40,5 +40,5 @@ deployGhPage:
 	(cd /tmp && git clone git@github.com:jeromeetienne/EasyWebsocket.git EasyWebsocketGhPages)
 	(cd /tmp/EasyWebsocketGhPages && git checkout gh-pages)
 	cp -a *.html *.js CNAME ./gapp/ ./node ./example ./contrib /tmp/EasyWebsocketGhPages
-	(cd /tmp/EasyWebsocketGhPages && git add . && git commit -a -m "Another deployement" && git push origin gh-pages)
+	(cd /tmp/EasyWebsocketGhPages && git add . && (git commit -a -m "Another deployement" || true) && git push origin gh-pages)
 	#rm -rf /tmp/EasyWebsocketGhPages
