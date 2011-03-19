@@ -11,7 +11,6 @@ app_create:
 
 # need to get the proper git remote
 # - get it in the app_info json output
-# - 
 git_setup:
 	git remote rm nodester
 	git remote add nodester ec2-user@nodester.com:/home/ec2-user/hosted_apps/jetienne/535-eff3208a1e9009ba30bddc796915d488.git
