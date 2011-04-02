@@ -9,12 +9,6 @@ STARTJS_PATH="node/server/server.js"
 app_create:
 	curl -X POST -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" -d "appname=$(NSTER_APPNAME)&start=$(STARTJS_PATH)" http://api.nodester.com/app | jsonpretty
 
-# need to get the proper git remote
-# - get it in the app_info json output
-git_setup:
-	git remote rm nodester
-	git remote add nodester ec2-user@nodester.com:/home/ec2-user/hosted_apps/jetienne/535-eff3208a1e9009ba30bddc796915d488.git
-
 app_delete:
 	curl -X DELETE -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" -d "appname=$(NSTER_APPNAME)" http://api.nodester.com/app | jsonpretty
 
@@ -32,4 +26,10 @@ app_logs:
 
 apps_info:
 	curl -s -u "$(NSTER_USERNAME):$(NSTER_PASSWORD)" http://api.nodester.com/apps | jsonpretty
+
+# need to get the proper git remote
+# - get it in the app_info json output
+git_setup:
+	git remote rm nodester
+	git remote add nodester ec2-user@nodester.com:/home/ec2-user/hosted_apps/jetienne/797-8e921e4d8d8f069a7de0d3d67e41be3b.git
 
