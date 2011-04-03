@@ -153,7 +153,7 @@
 				setInterval(function(){
 					if( mouseCurX == mouseOldX && mouseCurY == mouseOldY )	return;
 					socket.send(me + ' ' + tail.join(' '));
-			    tail = [];
+					tail = [];
 					mouseOldX	= mouseCurX;
 					mouseOldY	= mouseCurY;
 				}, 100)
@@ -175,7 +175,7 @@
 			    inc++;
 			    setTimeout(function() {
 			      xy = xy.split(',');
-			      cursors[id].css({ left: xy[0] + 'px', top: xy[1] + 'px' });
+			      cursors[id].css({ left: xy[0]  + 'px', top: xy[1] + 'px' });
 			    }, mul * inc);
 			  })
 			}
@@ -189,7 +189,7 @@
 				mouseCurX	= e.pageX;
 				mouseCurY	= e.pageY;
 				tail.push([ mouseCurX, mouseCurY ]);
-				cursors[me].css({ left: mouseCurX + 'px', top: mouseCurY + 'px' });
+				cursors[me].css({ left: (mouseCurX+2) + 'px', top: (mouseCurY+2) + 'px' });
 			})		 
 		})
 	</script> 
