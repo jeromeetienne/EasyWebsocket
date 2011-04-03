@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // MUST matches nodester one
-var listenPort	= 8689;
+var listenPort	= 8650;
 
 // start http server
 var httpSrv	= require('http').createServer(function(request, response){
