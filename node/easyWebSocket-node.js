@@ -48,21 +48,12 @@ EasyWebSocket.prototype._sioCtor	= function()
 	var listenHost	= serverUrl.host;
 	var listenPort	= parseInt(serverUrl.port);
 
-	// configure the swf for the flash websocket
-	// - NOTE: not sure about this. i dont understand flash 'security'
-	WEB_SOCKET_SWF_LOCATION	= 'http://easywebsocket.org/node/server/node_modules/socket.io/support/socket.io-client/lib/vendor/web-socket-js/WebSocketMainInsecure.swf';
-
 	// create and config the socket
-	this._sockio	= new io.Socket(listenHost, {
-		port			: listenPort
-		//rememberTransport	: false,
-		//transports		: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling']
-	});
-	this._sockio.connect();
+    this._sockio = io.connect(listenHost + ":" + listenPort, { 'force new connection': true });
 	this._sockio.on('connect', function(){
 		self.log("socket connected", self._sockio, self._clientId)
 		// send the connect message
-		self._sockio.send({
+		self._sockio.json.send({
 			type	: "connect",
 			data	: {
 				wsUrl	: self.url,
@@ -80,11 +71,11 @@ EasyWebSocket.prototype._sioCtor	= function()
 	this._sockio.on('message', function(message){
 		self.log("received message", message);
 		// notify the received message
-		self.onmessage({data: message})
+        self.onmessage({data: message})
 	}) 
 	this._sockio.on('disconnect', function(){
 		self.log("socket disconnected")
-		self.onclose()	// TODO is there an event attached to that
+		self.onclose();	// TODO is there an event attached to that
 	})
 }
 
@@ -99,7 +90,7 @@ EasyWebSocket.prototype._sioCtor	= function()
 */
 EasyWebSocket.prototype.send	= function(data)
 {
-	this._sockio.send({
+    this._sockio.json.send({
 		type	: "message",
 		data	: {
 			clientId: this._clientId,
@@ -134,7 +125,6 @@ EasyWebSocket.CLOSED		= 3;
  *   * EasyWebSocket.iframeOrigin	= "http://localhost:8080";
  *   * EasyWebSocket.logFunction	= console.log.bind(console);
 */
-EasyWebSocket.serverUrl		= "http://88.191.76.230:8950"; 	// TODO change this to be tunable and work on nodester
 EasyWebSocket.logFunction	= function(){}
 
 //////////////////////////////////////////////////////////////////////////////////
