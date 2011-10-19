@@ -125,6 +125,8 @@ EasyWebSocket.CLOSED		= 3;
  *   * EasyWebSocket.iframeOrigin	= "http://localhost:8080";
  *   * EasyWebSocket.logFunction	= console.log.bind(console);
 */
+
+EasyWebSocket.serverUrl    = "http://88.191.76.230:8950";   // TODO change this to be tunable and work on nodester
 EasyWebSocket.logFunction	= function(){}
 
 //////////////////////////////////////////////////////////////////////////////////
