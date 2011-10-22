@@ -1,13 +1,22 @@
+
+ALL_TESTS = $(shell find test/ -name '*.test.js')
+
+run-tests:
+	@./node_modules/.bin/expresso \
+		-t 3000 \
+		-I support \
+		-I lib \
+		--serial \
+		$(TESTFLAGS) \
+		$(TESTS)
+
 test:
-	./support/expresso/bin/expresso -I lib $(TESTFLAGS) tests/*.js
+	@$(MAKE) TESTS="$(ALL_TESTS)" run-tests
 
 test-cov:
 	@TESTFLAGS=--cov $(MAKE) test
-	
-example:
-	node ./example/server.js
 
-example-ssl:
-	node ./example/server-ssl.js
+test-leaks:
+	@ls test/leaks/* | xargs node --expose_debug_as=debug --expose_gc
 
-.PHONY: example
+.PHONY: test

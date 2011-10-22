@@ -22,8 +22,8 @@ var wsUrls	= {};
 
 // socket.io
 var socketioSrv	= require('socket.io').listen(httpSrv); 
-socketioSrv.on('connection', function(client){
-	console.log("recevied a connection from clientId", client.sessionId);
+socketioSrv.sockets.on('connection', function(client){
+	console.log("recevied a connection from clientId", client.id);
 	// new client is here! 
 	client.on('message', function(message){
 		var onConnect	= function(eventData){
@@ -39,21 +39,23 @@ socketioSrv.on('connection', function(client){
 			wsUrls[wsUrl].push(ewsClient);
 		};
 		var onMessage	= function(eventData){		
-			console.log("onMessage", eventData);
+			//console.log("onMessage", eventData);
 			var clientId	= eventData.clientId;
 			
 			var ewsClient	= ewsClients[clientId];
 			var msg		= eventData.message;
 			var urlClients	= wsUrls[ewsClient.wsUrl];
-			urlClients.forEach(function(urlClient){
-				urlClient.sioClient.send(msg);
+            urlClients.forEach(function(urlClient){
+                console.log("sending " + eventData.clientId  + " to client: " + urlClient.clientId);
+                urlClient.sioClient.json.send(msg);
 			});
 		};
 // likely issues in garbage collectors
-
-		console.log("received message", message);
-		if( !message.type )	return;
-		message.data	= message.data || {};
+        
+		//console.log("received message", message);
+       
+        if ( !message.type )	return;
+        message.data	= message.data || {};
 		if( message.type === 'connect' ){
 			onConnect(message.data);
 		}else if( message.type === 'message' ){
@@ -61,6 +63,6 @@ socketioSrv.on('connection', function(client){
 		}
 	});
 	client.on('disconnect', function(){
-		console.log("disconnection from clientid", client.sessionId);
+		console.log("disconnection from clientid", client.id);
 	});
 }); 

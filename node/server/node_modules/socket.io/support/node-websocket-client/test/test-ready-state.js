@@ -2,12 +2,15 @@
 
 var assert = require('assert');
 var WebSocket = require('../lib/websocket').WebSocket;
-var WebSocketServer = require('websocket-server/ws').Server;
+var WebSocketServer = require('websocket-server/ws/server').Server;
 
 var PORT = 1024 + Math.floor(Math.random() * 4096);
 
 var wss = new WebSocketServer();
 wss.listen(PORT, 'localhost');
+wss.on('connection', function(c) {
+    c.close();
+});
 
 var ws = new WebSocket('ws://localhost:' + PORT);
 assert.equal(ws.readyState, ws.CONNECTING);

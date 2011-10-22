@@ -3,17 +3,18 @@
 var assert = require('assert');
 var sys = require('sys');
 var WebSocket = require('../lib/websocket').WebSocket;
-var WebSocketServer = require('websocket-server/ws').Server;
+var WebSocketServer = require('websocket-server/ws/server').Server;
 
 var PORT = 1024 + Math.floor(Math.random() * 4096);
 
 var wss = new WebSocketServer();
 wss.listen(PORT, 'localhost');
-wss.addListener('connection', function(c) {
+wss.on('connection', function(c) {
+    c.close();
     wss.close();
 });
 var ws = new WebSocket('ws://localhost:' + PORT + '/', 'biff');
-ws.addListener('open', function() {
+ws.on('open', function() {
     assert.equal(ws.CONNECTING, 0);
     try {
         ws.CONNECTING = 13;
@@ -39,6 +40,4 @@ ws.addListener('open', function() {
     } catch (e) {
         assert.equal(e.type, 'no_setter_in_callback');
     }
-
-    ws.close();
 });
