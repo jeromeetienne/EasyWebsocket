@@ -126,7 +126,9 @@ EasyWebSocket.CLOSED		= 3;
  *   * EasyWebSocket.logFunction	= console.log.bind(console);
 */
 
-EasyWebSocket.serverUrl    = "http://88.191.76.230:8950";   // TODO change this to be tunable and work on nodester
+EasyWebSocket.serverUrl	= "http://88.191.76.230:8950";	// TODO change this to be tunable and work on nodester
+//EasyWebSocket.serverUrl	= "http://192.168.0.10:8950";	// for devel only
+
 EasyWebSocket.logFunction	= function(){}
 
 //////////////////////////////////////////////////////////////////////////////////

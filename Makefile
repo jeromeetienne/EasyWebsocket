@@ -24,8 +24,8 @@ docs:
 		> gapp/iframe/doc/index.html
 
 minify:
-	closurec --js node/server/node_modules/socket.io/support/socket.io-client/socket.io.js 		\
-			--js node/easyWebSocket-node.js 						\
+	closurec --js node/server/node_modules/socket.io-client/dist/socket.io.js	\
+			--js node/easyWebSocket-node.js 				\
 			--js_output_file easyWebSocket-node.min.js
 	closurec --js gapp/easyWebSocket-gapp.js --js_output_file easyWebSocket-gapp.min.js
 	cp easyWebSocket-node.min.js easyWebSocket.min.js
